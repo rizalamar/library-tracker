@@ -1,13 +1,14 @@
-package com.rizalamar.librarytracker;
+package com.rizalamar.librarytracker.repository;
 
 import com.rizalamar.librarytracker.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 import java.util.UUID;
 
-@org.springframework.stereotype.Repository
-public interface Repository extends JpaRepository<User, UUID> {
+@Repository
+public interface UserRepository extends JpaRepository<User, UUID> {
 
     Optional<User> findByUsername(String username);
 
