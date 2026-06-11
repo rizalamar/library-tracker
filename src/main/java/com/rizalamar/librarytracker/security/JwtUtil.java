@@ -28,13 +28,13 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateToken(String email){
+    public String generateToken(UserDetails userDetails){
         return Jwts.builder()
-                .subject(email)
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(getSingingKey())
-                .compact();
+                .subject(userDetails.getUsername())
+                .issuedAt(new Date(System.currentTimeMillis())) // time that token made
+                .expiration(new Date(System.currentTimeMillis() + expiration)) // until token expired
+                .signWith(getSingingKey()) // sign (tanda tangan)
+                .compact(); // wrapped with string
     }
 
     public String extractUsername(String token){
@@ -55,8 +55,8 @@ public class JwtUtil {
     }
 
     public boolean validateToken (String token, UserDetails userDetails){
-        final String email = extractUsername(token);
-        return (email.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        final String username = extractUsername(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
     private boolean isTokenExpired(String token){
