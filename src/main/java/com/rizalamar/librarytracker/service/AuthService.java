@@ -72,7 +72,7 @@ public class AuthService {
         return AuthResponse.builder()
                 .token(token)
                 .username(user.getUsername())
-                .role(Role.USER.name())
+                .role(user.getRole().name())
                 .build();
     }
 }
