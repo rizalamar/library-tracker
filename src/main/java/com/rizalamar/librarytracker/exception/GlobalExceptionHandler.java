@@ -52,7 +52,7 @@ public class GlobalExceptionHandler {
                 .body(
                         WebResponse.<String>builder()
                                 .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                                .status("INTERNAL SERVER ERRIR")
+                                .status("INTERNAL SERVER ERROR")
                                 .data("Error occured: " + exception.getMessage())
                                 .build()
                 );

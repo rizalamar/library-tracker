@@ -6,6 +6,7 @@ import com.rizalamar.librarytracker.service.OpenLibraryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ public class OpenLibraryController {
     private final OpenLibraryService openLibraryService;
 
     @GetMapping("/{isbn}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<WebResponse<BookResponse>> fetchBookByIsbn(@PathVariable String isbn){
         BookResponse bookResponse = openLibraryService.fetchBookByIsbn(isbn);
         return ResponseEntity.ok(
