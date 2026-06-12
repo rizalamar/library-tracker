@@ -23,7 +23,10 @@ public class GoogleBooksController {
         BookResponse bookResponse = googleBookService.fetchBookByIsbn(isbn);
         return ResponseEntity.ok(
                 WebResponse.<BookResponse>builder()
-                        .code(HttpStatus.OK.value()).status("OK").data(bookResponse).build()
+                        .code(HttpStatus.OK.value())
+                        .status("OK")
+                        .data(bookResponse)
+                        .build()
         );
     }
 }
