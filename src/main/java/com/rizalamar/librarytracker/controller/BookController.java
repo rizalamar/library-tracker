@@ -41,6 +41,7 @@ public class BookController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
+    @ResponseStatus(HttpStatus.CREATED)
     public WebResponse<BookResponse> createBook(@Valid @RequestBody BookRequest request){
         BookResponse book = bookService.createBook(request);
         return WebResponse.<BookResponse>builder()
@@ -66,6 +67,7 @@ public class BookController {
 
     @DeleteMapping("/{bookId}")
     @PreAuthorize("hasRole('ADMIN')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public WebResponse<String> deleteBook(@PathVariable("bookId") UUID id){
         bookService.deleteBook(id);
         return WebResponse.<String>builder()
