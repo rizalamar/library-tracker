@@ -1,6 +1,8 @@
 package com.rizalamar.librarytracker.service;
 
+import com.rizalamar.librarytracker.domain.Author;
 import com.rizalamar.librarytracker.domain.Book;
+import com.rizalamar.librarytracker.domain.Publisher;
 import com.rizalamar.librarytracker.dto.book.BookRequest;
 import com.rizalamar.librarytracker.dto.book.BookResponse;
 import com.rizalamar.librarytracker.repository.BookRepository;
@@ -40,10 +42,24 @@ public class BookService {
     public BookResponse createBook(BookRequest request){
         Book book = Book.builder()
                 .title(request.title())
-                .author(request.author())
+                .authors(request.authors().stream()
+                        .map(author ->
+                                Author.builder()
+                                    .url(author.url())
+                                    .name(author.name())
+                                    .build()
+                        ).collect(Collectors.toList())
+                )
                 .isbn(request.isbn())
-                .description(request.description())
-                .publisher(request.publisher())
+                .subtitle(request.subtitle())
+                .publishers(
+                        request.publishers().stream()
+                                .map(publisher ->
+                                        Publisher.builder()
+                                                .name(publisher.name())
+                                                .build()
+                                ).collect(Collectors.toList())
+                )
                 .publishedDate(request.publishedDate())
                 .imageUrl(request.imageUrl())
                 .available(true)
@@ -61,20 +77,35 @@ public class BookService {
             book.setTitle(request.title());
         }
 
-        if(Objects.nonNull(request.author())){
-            book.setAuthor(request.author());
+        if(Objects.nonNull(request.authors())){
+            book.setAuthors(
+                    request.authors().stream()
+                            .map(author ->
+                                    Author.builder()
+                                            .url(author.url())
+                                            .name(author.name())
+                                            .build()
+                            ).collect(Collectors.toList())
+            );
         }
 
         if(Objects.nonNull(request.isbn())){
             book.setIsbn(request.isbn());
         }
 
-        if(Objects.nonNull(request.description())){
-            book.setDescription(request.description());
+        if(Objects.nonNull(request.subtitle())){
+            book.setSubtitle(request.subtitle());
         }
 
-        if(Objects.nonNull(request.publisher())){
-            book.setPublisher(request.publisher());
+        if(Objects.nonNull(request.publishers())){
+            book.setPublishers(
+                    request.publishers().stream()
+                            .map(publisher ->
+                                    Publisher.builder()
+                                            .name(publisher.name())
+                                            .build()
+                            ).collect(Collectors.toList())
+            );
         }
 
         if(Objects.nonNull(request.publishedDate())){
@@ -99,10 +130,20 @@ public class BookService {
         return BookResponse.builder()
                 .id(book.getId())
                 .title(book.getTitle())
-                .author(book.getAuthor())
+                .authors(
+                        book.getAuthors() != null ?
+                                book.getAuthors().stream().map(author ->
+                                        new BookResponse.Author(author.getUrl(), author.getName())).toList()
+                                : List.of()
+                        )
                 .isbn(book.getIsbn())
-                .description(book.getDescription())
-                .publisher(book.getPublisher())
+                .subtitle(book.getSubtitle())
+                .publishers(
+                        book.getPublishers() != null ?
+                                book.getPublishers().stream().map(publisher ->
+                                        new BookResponse.Publishers(publisher.getName())).toList()
+                                : List.of()
+                        )
                 .publishedDate(book.getPublishedDate())
                 .imageUrl(book.getImageUrl())
                 .available(book.isAvailable())

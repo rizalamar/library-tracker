@@ -1,10 +1,10 @@
 package com.rizalamar.librarytracker.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,15 +18,18 @@ public class Book extends AbstractAuditingEntity {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
-    private String author;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "book_id")
+    private List<Author> authors;
 
     private String isbn;
 
     @Column(columnDefinition = "TEXT")
-    private String description;
+    private String subtitle;
 
-    private String publisher;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "book_id")
+    private List<Publisher> publishers;
 
     @Column(name = "published_date")
     private String publishedDate;
