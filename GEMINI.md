@@ -8,7 +8,7 @@ A casual REST API for tracking personal reading collections and book statuses, i
 *Framework:* Spring Boot 3.x
 *Security:* Spring Security & JWT (Stateless)
 *Database:* JPA/Hibernate (PostgreSQL) with JPA Auditing
-*External Integration:* RestTemplate (Google Books API)
+*External Integration:* RestTemplate (Open Library API)
 *Documentation:* Springdoc OpenAPI
 
 ## Architectural Mandates
