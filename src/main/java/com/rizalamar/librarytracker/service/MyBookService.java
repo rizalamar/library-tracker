@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 public class MyBookService {
     private final MyBookRepository myBookRepository;
     private final BookRepository bookRepository;
+    private final BookService bookService;
 
     @Transactional(readOnly = true)
     public List<MyBookResponse> getMyBooks(User user){
@@ -83,30 +84,7 @@ public class MyBookService {
     private MyBookResponse mapToResponse(MyBook myBook){
         Book book = myBook.getBook();
 
-        BookResponse bookResponse = BookResponse.builder()
-                .id(book.getId())
-                .title(book.getTitle())
-                .authors(
-                        book.getAuthors() != null ?
-                                book.getAuthors().stream().map(
-                                        author -> new BookResponse.Author(author.getUrl(), author.getName())
-                                ).toList()
-                                : List.of()
-                )
-                .isbn(book.getIsbn())
-                .subtitle(book.getSubtitle())
-                .publishers(
-                        book.getPublishers() != null ?
-                                book.getPublishers().stream().map(
-                                        publisher -> new BookResponse.Publishers(publisher.getName())
-                                ).toList()
-                                : List.of()
-                )
-                .publishedDate(book.getPublishedDate())
-                .imageUrl(book.getImageUrl())
-                .available(book.isAvailable())
-                .createdAt(book.getCreatedAt())
-                .build();
+        BookResponse bookResponse = bookService.mapToBookResponse(book);
 
         return MyBookResponse.builder()
                 .id(myBook.getId())

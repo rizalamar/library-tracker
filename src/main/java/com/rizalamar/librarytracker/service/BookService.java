@@ -6,7 +6,6 @@ import com.rizalamar.librarytracker.domain.Publisher;
 import com.rizalamar.librarytracker.dto.book.BookRequest;
 import com.rizalamar.librarytracker.dto.book.BookResponse;
 import com.rizalamar.librarytracker.repository.BookRepository;
-import com.rizalamar.librarytracker.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -26,7 +25,7 @@ public class BookService {
     @Transactional(readOnly = true)
     public List<BookResponse> getAllBooks(){
         return bookRepository.findAll().stream()
-                .map(this::mapToResponse)
+                .map(this::mapToBookResponse)
                 .collect(Collectors.toList());
     }
 
@@ -35,7 +34,7 @@ public class BookService {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found"));
 
-        return mapToResponse(book);
+        return mapToBookResponse(book);
     }
 
     @Transactional
@@ -65,7 +64,7 @@ public class BookService {
                 .available(true)
                 .build();
         Book savedBook = bookRepository.save(book);
-        return mapToResponse(savedBook);
+        return mapToBookResponse(savedBook);
     }
 
     @Transactional
@@ -117,7 +116,7 @@ public class BookService {
         }
 
         Book updatedBook = bookRepository.save(book);
-        return mapToResponse(updatedBook);
+        return mapToBookResponse(updatedBook);
     }
 
     public void deleteBook(UUID id){
@@ -126,7 +125,7 @@ public class BookService {
         bookRepository.deleteById(book.getId());
     }
 
-    private BookResponse mapToResponse(Book book) {
+    public BookResponse mapToBookResponse(Book book) {
         return BookResponse.builder()
                 .id(book.getId())
                 .title(book.getTitle())

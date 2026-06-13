@@ -22,7 +22,7 @@ public class MyBook extends AbstractAuditingEntity {
     private Book book;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "status", nullable = false)
     @Builder.Default
     private ReadingStatus status = ReadingStatus.UNREAD;
 
