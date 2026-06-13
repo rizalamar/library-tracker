@@ -25,6 +25,7 @@ public class MyBookService {
     private final MyBookRepository myBookRepository;
     private final BookRepository bookRepository;
     private final BookService bookService;
+    private final ValidationService validationService;
 
     @Transactional(readOnly = true)
     public List<MyBookResponse> getMyBooks(User user){
@@ -35,11 +36,7 @@ public class MyBookService {
 
     @Transactional
     public MyBookResponse addBookToCollection(User user, UUID bookId){
-        boolean isBookExists = myBookRepository.existsByUserAndBookId(user, bookId);
-
-        if(isBookExists){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Book already in your collection");
-        }
+       validationService.validateBookNotAlreadyInCollection(user, bookId);
 
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found"));
@@ -59,9 +56,7 @@ public class MyBookService {
         MyBook myBook = myBookRepository.findById(myBookId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "MyBook entry not found"));
 
-        if(!myBook.getUser().getId().equals(user.getId())){
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to update this book");
-        }
+        validationService.validateMyBookOwnerShip(user, myBook);
 
         if(Objects.nonNull(request.status())){
             myBook.setStatus(request.status());
