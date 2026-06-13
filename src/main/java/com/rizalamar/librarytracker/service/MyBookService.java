@@ -4,6 +4,7 @@ import com.rizalamar.librarytracker.domain.Book;
 import com.rizalamar.librarytracker.domain.MyBook;
 import com.rizalamar.librarytracker.domain.User;
 import com.rizalamar.librarytracker.dto.book.BookResponse;
+import com.rizalamar.librarytracker.dto.mybook.MyBookRequest;
 import com.rizalamar.librarytracker.dto.mybook.MyBookResponse;
 import com.rizalamar.librarytracker.repository.BookRepository;
 import com.rizalamar.librarytracker.repository.MyBookRepository;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -52,6 +54,28 @@ public class MyBookService {
     }
 
     @Transactional
+    public MyBookResponse updateMyBook(User user, UUID myBookId, MyBookRequest request){
+        MyBook myBook = myBookRepository.findById(myBookId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "MyBook entry not found"));
+
+        if(!myBook.getUser().getId().equals(user.getId())){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to update this book");
+        }
+
+        if(Objects.nonNull(request.status())){
+            myBook.setStatus(request.status());
+        }
+
+        if(Objects.nonNull(request.notes())){
+            myBook.setNotes(request.notes());
+        }
+
+        MyBook updatedBook = myBookRepository.save(myBook);
+
+        return mapToResponse(updatedBook);
+    }
+
+    @Transactional
     public void removeBookFromCollection(User user, UUID myBookId){
         myBookRepository.deleteByUserAndId(user, myBookId);
     }
@@ -87,6 +111,8 @@ public class MyBookService {
         return MyBookResponse.builder()
                 .id(myBook.getId())
                 .book(bookResponse)
+                .status(myBook.getStatus())
+                .notes(myBook.getNotes())
                 .createdAt(myBook.getCreatedAt())
                 .build();
     }
