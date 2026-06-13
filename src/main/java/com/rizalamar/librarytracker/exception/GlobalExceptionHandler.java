@@ -1,8 +1,10 @@
 package com.rizalamar.librarytracker.exception;
 
 import com.rizalamar.librarytracker.dto.WebResponse;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -42,6 +44,18 @@ public class GlobalExceptionHandler {
                                 .code(HttpStatus.BAD_REQUEST.value())
                                 .status("BAD REQUEST")
                                 .data(errors)
+                                .build()
+                );
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<WebResponse<String>> handleForbiddenException(AccessDeniedException exception){
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(
+                        WebResponse.<String>builder()
+                                .code(HttpStatus.FORBIDDEN.value())
+                                .status("FORBIDDEN")
+                                .data("You do not have a permission to access")
                                 .build()
                 );
     }
