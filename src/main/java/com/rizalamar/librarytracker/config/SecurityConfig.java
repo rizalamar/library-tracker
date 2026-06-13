@@ -1,5 +1,7 @@
 package com.rizalamar.librarytracker.config;
 
+import com.rizalamar.librarytracker.exception.custom.CustomAccessDeniedHandler;
+import com.rizalamar.librarytracker.exception.custom.CustomAuthenticationEntryPoint;
 import com.rizalamar.librarytracker.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +29,8 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserDetailsService userDetailsService;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws  Exception {
@@ -39,6 +43,11 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(
+                        exception -> exception
+                                .accessDeniedHandler(customAccessDeniedHandler)
+                                .authenticationEntryPoint(customAuthenticationEntryPoint)
+                )
                 .authenticationProvider(authenticationProvider()) // gunakan provider kita(DB + BCrypt)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);// panggal jwtAuthFilter
         return http.build();
