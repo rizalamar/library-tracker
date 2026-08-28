@@ -13,6 +13,9 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "users")
 public class User extends AbstractAuditingEntity {
 
+    @Column(nullable = false)
+    private String fullName;
+
     @Column(unique = true, nullable = false)
     private String username;
 
