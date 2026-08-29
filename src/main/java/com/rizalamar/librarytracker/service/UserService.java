@@ -25,7 +25,7 @@ public class UserService {
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
-                user.getFullName(), 
+                user.getFullName(),
                 user.getRole()
         );
     }
