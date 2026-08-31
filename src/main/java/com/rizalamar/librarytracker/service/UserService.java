@@ -1,7 +1,7 @@
 package com.rizalamar.librarytracker.service;
 
 import com.rizalamar.librarytracker.domain.User;
-import com.rizalamar.librarytracker.dto.user.UpdateEmailRequest;
+import com.rizalamar.librarytracker.dto.user.UpdateProfileRequest;
 import com.rizalamar.librarytracker.dto.user.UserResponse;
 import com.rizalamar.librarytracker.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,10 +35,14 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponse updateEmail(UUID userId, UpdateEmailRequest request){
+    public UserResponse updateProfile(UUID userId, UpdateProfileRequest request){
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
         );
+
+        if(Objects.nonNull(request.fullName())){
+            user.setFullName(request.fullName());
+        }
 
         if(Objects.nonNull(request.email())){
             user.setEmail(request.email());

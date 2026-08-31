@@ -2,7 +2,7 @@ package com.rizalamar.librarytracker.controller;
 
 import com.rizalamar.librarytracker.domain.User;
 import com.rizalamar.librarytracker.dto.WebResponse;
-import com.rizalamar.librarytracker.dto.user.UpdateEmailRequest;
+import com.rizalamar.librarytracker.dto.user.UpdateProfileRequest;
 import com.rizalamar.librarytracker.dto.user.UserResponse;
 import com.rizalamar.librarytracker.security.CurrentUser;
 import com.rizalamar.librarytracker.service.UserService;
@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.security.auth.login.AccountException;
 import java.util.List;
 
 @RestController
@@ -38,9 +37,9 @@ public class UserController {
     @PutMapping("/me/email")
     public ResponseEntity<WebResponse<UserResponse>> updateEmail(
             @CurrentUser User currentUser,
-            @Valid @RequestBody UpdateEmailRequest request
+            @Valid @RequestBody UpdateProfileRequest request
     ) {
-        UserResponse userResponse = userService.updateEmail(currentUser.getId(), request);
+        UserResponse userResponse = userService.updateProfile(currentUser.getId(), request);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(
