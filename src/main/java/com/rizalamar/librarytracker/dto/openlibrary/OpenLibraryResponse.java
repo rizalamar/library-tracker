@@ -9,6 +9,12 @@ public record OpenLibraryResponse(
         String title,
         List<Author> authors,
         List<Publisher> publishers,
+        Integer number_of_pages,
+        List<String> subjects,   
+        List<String> subject_places,
+        List<String> subject_people,
+        List<String> subject_times,
+        List<String> excerpts
         String publish_date,
         Cover cover,
         String subtitle

@@ -43,6 +43,12 @@ public class OpenLibraryService {
                         openLibraryResponse.publishers() != null ?
                                 openLibraryResponse.publishers().stream().map(publisher -> new BookResponse.Publishers(publisher.name())).toList() : List.of()
                         )
+                .number_of_pages(openLibraryResponse.number_of_pages())
+                .subjects(openLibraryResponse.subjects() != null ? openLibraryResponse.subjects() : List.of())
+                .subjectPlaces(openLibraryResponse.subject_places() != null ? openLibraryResponse.subject_places() : List.of())
+                .subjectsPeople(openLibraryResponse.subject_people() != null ? openLibraryResponse.subject_people() : List.of())
+                .subjectTimes(openLibraryResponse.subject_times() != null ? openLibraryResponse.subject_times() : List.of())
+                .excerpts(openLibraryResponse.excerpts() != null ? openLibraryResponse.excerpts() : List.of())
                 .subtitle(openLibraryResponse.subtitle())
                 .publishedDate(openLibraryResponse.publish_date())
                 .imageUrl(openLibraryResponse.cover() != null ? openLibraryResponse.cover().large() : null)
