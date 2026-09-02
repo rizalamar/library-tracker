@@ -34,8 +34,8 @@ public class UserController {
         );
     }
 
-    @PutMapping("/me/email")
-    public ResponseEntity<WebResponse<UserResponse>> updateEmail(
+    @PutMapping("/me/update")
+    public ResponseEntity<WebResponse<UserResponse>> updateProfile(
             @CurrentUser User currentUser,
             @Valid @RequestBody UpdateProfileRequest request
     ) {

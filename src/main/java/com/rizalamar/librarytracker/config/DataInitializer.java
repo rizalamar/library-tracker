@@ -21,8 +21,10 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+        User admin = userRepository.findByUsername("admin").orElse(null);
+
         if (!userRepository.existsByUsername("admin")){
-            User admin = User.builder()
+            admin = User.builder()
                     .username("admin")
                     .email("admin@library.com")
                     .fullName("Administrator")
@@ -31,7 +33,12 @@ public class DataInitializer implements CommandLineRunner {
                     .enabled(true)
                     .build();
             userRepository.save(admin);
-            log.info("Hai admin! Welcome!");
+            log.info("Admin created");
+        } else if (admin.getEmail() == null || admin.getFullName() == null){
+            admin.setFullName("Administrator");
+            admin.setEmail("admin@library.com");
+            userRepository.save(admin);
+            log.info("Admin update with full details");
         }
 
         if(bookRepository.count() == 0) {
