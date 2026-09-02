@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rizalamar.librarytracker.dto.book.BookResponse;
 import com.rizalamar.librarytracker.dto.openlibrary.OpenLibraryResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -20,6 +21,7 @@ public class OpenLibraryService {
     private final ObjectMapper objectMapper;
     private static final String OPEN_LIBRARY_API = "https://openlibrary.org/api/books?bibkeys=ISBN:%s&format=json&jscmd=data";
 
+    @Cacheable(value = "bookMetadata", key = "#isbn")
     public BookResponse fetchBookByIsbn(String isbn){
         String url = String.format(OPEN_LIBRARY_API, isbn);
 

@@ -24,8 +24,8 @@ import java.util.stream.Collectors;
 public class MyBookService {
     private final MyBookRepository myBookRepository;
     private final BookRepository bookRepository;
-    private final BookService bookService;
     private final ValidationService validationService;
+    private final OpenLibraryService openLibraryService;
 
     @Transactional(readOnly = true)
     public List<MyBookResponse> getMyBooks(User user){
@@ -77,9 +77,17 @@ public class MyBookService {
     }
 
     private MyBookResponse mapToResponse(MyBook myBook){
-        Book book = myBook.getBook();
+        Book baseBook = myBook.getBook();
 
-        BookResponse bookResponse = bookService.mapToBookResponse(book);
+        BookResponse enrichedBook = null;
+
+        try{
+            enrichedBook = openLibraryService.fetchBookByIsbn(baseBook.getIsbn());
+        } catch (Exception ignored) {
+
+        }
+
+        BookResponse bookResponse = mapToBookResponse(baseBook, enrichedBook);
 
         return MyBookResponse.builder()
                 .id(myBook.getId())
@@ -87,6 +95,43 @@ public class MyBookService {
                 .status(myBook.getStatus())
                 .notes(myBook.getNotes())
                 .createdAt(myBook.getCreatedAt())
+                .build();
+    }
+
+    private BookResponse mapToBookResponse(Book book, BookResponse enriched){
+        return BookResponse.builder()
+                .id(book.getId())
+                .title(book.getTitle())
+                .isbn(book.getIsbn())
+                .subtitle(book.getSubtitle())
+                .authors(
+                        book.getAuthors() != null ?
+                                book.getAuthors().stream()
+                                        .map(
+                                                author -> new BookResponse.Author(
+                                                        author.getName(),
+                                                        author.getUrl()
+                                                )
+                                        ).toList() : List.of())
+                .publishers(
+                        book.getPublishers() != null ?
+                                book.getPublishers().stream()
+                                        .map(
+                                                publisher -> new BookResponse.Publishers(
+                                                        publisher.getName()
+                                                )
+                                        ).toList() : List.of()
+                )
+                .number_of_pages(enriched != null ? enriched.number_of_pages() : null)
+                .subjects(enriched != null ? enriched.subjects() : List.of())
+                .subjectsPeople(enriched != null ? enriched.subjectsPeople() : List.of())
+                .subjectPlaces(enriched != null ? enriched.subjectPlaces() : List.of())
+                .subjectTimes(enriched != null ? enriched.subjectTimes() : List.of())
+                .excerpts(enriched != null ? enriched.excerpts() : List.of())
+                .publishedDate(book.getPublishedDate())
+                .imageUrl(book.getImageUrl())
+                .available(book.isAvailable())
+                .createdAt(book.getCreatedAt())
                 .build();
     }
 

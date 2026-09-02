@@ -21,32 +21,33 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BookService {
     private final BookRepository bookRepository;
+    private final OpenLibraryService openLibraryService;
 
     @Transactional(readOnly = true)
-    public List<BookResponse> getAllBooks(){
+    public List<BookResponse> getAllBooks() {
         return bookRepository.findAll().stream()
-                .map(this::mapToBookResponse)
+                .map(this::mapToEnrichmentResponse)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public BookResponse getById(UUID id){
+    public BookResponse getById(UUID id) {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found"));
 
-        return mapToBookResponse(book);
+        return mapToEnrichmentResponse(book);
     }
 
     @Transactional
-    public BookResponse createBook(BookRequest request){
+    public BookResponse createBook(BookRequest request) {
         Book book = Book.builder()
                 .title(request.title())
                 .authors(request.authors().stream()
                         .map(author ->
                                 Author.builder()
-                                    .url(author.url())
-                                    .name(author.name())
-                                    .build()
+                                        .url(author.url())
+                                        .name(author.name())
+                                        .build()
                         ).collect(Collectors.toList())
                 )
                 .isbn(request.isbn())
@@ -64,19 +65,19 @@ public class BookService {
                 .available(true)
                 .build();
         Book savedBook = bookRepository.save(book);
-        return mapToBookResponse(savedBook);
+        return mapToEnrichmentResponse(savedBook);
     }
 
     @Transactional
-    public BookResponse updateBook(UUID id, BookRequest request){
+    public BookResponse updateBook(UUID id, BookRequest request) {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found"));
 
-        if(Objects.nonNull(request.title())){
+        if (Objects.nonNull(request.title())) {
             book.setTitle(request.title());
         }
 
-        if(Objects.nonNull(request.authors())){
+        if (Objects.nonNull(request.authors())) {
             book.setAuthors(
                     request.authors().stream()
                             .map(author ->
@@ -88,15 +89,15 @@ public class BookService {
             );
         }
 
-        if(Objects.nonNull(request.isbn())){
+        if (Objects.nonNull(request.isbn())) {
             book.setIsbn(request.isbn());
         }
 
-        if(Objects.nonNull(request.subtitle())){
+        if (Objects.nonNull(request.subtitle())) {
             book.setSubtitle(request.subtitle());
         }
 
-        if(Objects.nonNull(request.publishers())){
+        if (Objects.nonNull(request.publishers())) {
             book.setPublishers(
                     request.publishers().stream()
                             .map(publisher ->
@@ -107,25 +108,54 @@ public class BookService {
             );
         }
 
-        if(Objects.nonNull(request.publishedDate())){
+        if (Objects.nonNull(request.publishedDate())) {
             book.setPublishedDate(request.publishedDate());
         }
 
-        if(Objects.nonNull(request.imageUrl())){
+        if (Objects.nonNull(request.imageUrl())) {
             book.setImageUrl(request.imageUrl());
         }
 
         Book updatedBook = bookRepository.save(book);
-        return mapToBookResponse(updatedBook);
+        return mapToEnrichmentResponse(updatedBook);
     }
 
-    public void deleteBook(UUID id){
+    public void deleteBook(UUID id) {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found"));
         bookRepository.deleteById(book.getId());
     }
 
-    public BookResponse mapToBookResponse(Book book) {
+    public BookResponse mapToEnrichmentResponse(Book book) {
+        BookResponse baseBookResponse = mapToBookResponse(book);
+
+        try {
+            BookResponse enriched = openLibraryService.fetchBookByIsbn(book.getIsbn());
+
+            return new BookResponse(
+                    baseBookResponse.id(),
+                    baseBookResponse.title(),
+                    baseBookResponse.isbn(),
+                    baseBookResponse.subtitle(),
+                    baseBookResponse.authors(),
+                    baseBookResponse.publishers(),
+                    enriched.number_of_pages(),
+                    enriched.subjects(),
+                    enriched.subjectsPeople(),
+                    enriched.subjectPlaces(),
+                    enriched.subjectTimes(),
+                    enriched.excerpts(),
+                    baseBookResponse.publishedDate(),
+                    baseBookResponse.imageUrl(),
+                    baseBookResponse.available(),
+                    baseBookResponse.createdAt()
+            );
+        } catch (Exception e){
+            return baseBookResponse;
+        }
+    }
+
+    private BookResponse mapToBookResponse(Book book) {
         return BookResponse.builder()
                 .id(book.getId())
                 .title(book.getTitle())
@@ -134,7 +164,7 @@ public class BookService {
                                 book.getAuthors().stream().map(author ->
                                         new BookResponse.Author(author.getUrl(), author.getName())).toList()
                                 : List.of()
-                        )
+                )
                 .isbn(book.getIsbn())
                 .subtitle(book.getSubtitle())
                 .publishers(
@@ -142,7 +172,7 @@ public class BookService {
                                 book.getPublishers().stream().map(publisher ->
                                         new BookResponse.Publishers(publisher.getName())).toList()
                                 : List.of()
-                        )
+                )
                 .publishedDate(book.getPublishedDate())
                 .imageUrl(book.getImageUrl())
                 .available(book.isAvailable())
