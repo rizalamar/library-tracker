@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-@Builder
+@Builder(toBuilder = true)
 public record BookResponse(
         UUID id,
         String title,
@@ -20,7 +20,7 @@ public record BookResponse(
         List<String> subjectsPeople,
         List<String> subjectPlaces,
         List<String> subjectTimes,
-        List<String> excerpts,
+        List<Excerpts> excerpts,
         String publishedDate,
         String imageUrl,
         boolean available,
@@ -28,4 +28,5 @@ public record BookResponse(
 ) {
     public record Author(String url, String name){}
     public record Publishers(String name){}
+    public record Excerpts(String text, String comment){}
 }

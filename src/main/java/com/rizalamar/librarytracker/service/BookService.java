@@ -7,6 +7,7 @@ import com.rizalamar.librarytracker.dto.book.BookRequest;
 import com.rizalamar.librarytracker.dto.book.BookResponse;
 import com.rizalamar.librarytracker.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BookService {
@@ -131,26 +133,20 @@ public class BookService {
 
         try {
             BookResponse enriched = openLibraryService.fetchBookByIsbn(book.getIsbn());
+            System.out.printf("Enrichment data %s: %s", book.getIsbn(), enriched);
 
-            return new BookResponse(
-                    baseBookResponse.id(),
-                    baseBookResponse.title(),
-                    baseBookResponse.isbn(),
-                    baseBookResponse.subtitle(),
-                    baseBookResponse.authors(),
-                    baseBookResponse.publishers(),
-                    enriched.number_of_pages(),
-                    enriched.subjects(),
-                    enriched.subjectsPeople(),
-                    enriched.subjectPlaces(),
-                    enriched.subjectTimes(),
-                    enriched.excerpts(),
-                    baseBookResponse.publishedDate(),
-                    baseBookResponse.imageUrl(),
-                    baseBookResponse.available(),
-                    baseBookResponse.createdAt()
-            );
+            if (enriched == null) return baseBookResponse;
+
+            return baseBookResponse.toBuilder()
+                    .number_of_pages(enriched.number_of_pages())
+                    .subjects(enriched.subjects())
+                    .subjectPlaces(enriched.subjectPlaces())
+                    .subjectsPeople(enriched.subjectsPeople())
+                    .subjectTimes(enriched.subjectTimes())
+                    .excerpts(enriched.excerpts())
+                    .build();
         } catch (Exception e){
+            System.out.printf("Enrichment data failed %s: %s", book.getIsbn(), e.getMessage());
             return baseBookResponse;
         }
     }

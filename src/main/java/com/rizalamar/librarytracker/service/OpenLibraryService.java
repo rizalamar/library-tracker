@@ -45,11 +45,27 @@ public class OpenLibraryService {
                                 openLibraryResponse.publishers().stream().map(publisher -> new BookResponse.Publishers(publisher.name())).toList() : List.of()
                         )
                 .number_of_pages(openLibraryResponse.number_of_pages())
-                .subjects(openLibraryResponse.subjects() != null ? openLibraryResponse.subjects() : List.of())
-                .subjectPlaces(openLibraryResponse.subject_places() != null ? openLibraryResponse.subject_places() : List.of())
-                .subjectsPeople(openLibraryResponse.subject_people() != null ? openLibraryResponse.subject_people() : List.of())
-                .subjectTimes(openLibraryResponse.subject_times() != null ? openLibraryResponse.subject_times() : List.of())
-                .excerpts(openLibraryResponse.excerpts() != null ? openLibraryResponse.excerpts() : List.of())
+                .subjects(
+                        openLibraryResponse.subjects() != null ?
+                                openLibraryResponse.subjects().stream().map(OpenLibraryResponse.Subject::name).toList()
+                                : List.of()
+                )
+                .subjectPlaces(
+                        openLibraryResponse.subject_places() != null ?
+                                openLibraryResponse.subject_places().stream().map(OpenLibraryResponse.SubjectPlace::name).toList()
+                                : List.of()
+                )
+                .subjectsPeople(
+                        openLibraryResponse.subject_people() != null ?
+                                openLibraryResponse.subject_people().stream().map(OpenLibraryResponse.SubjectPeople::name).toList()
+                                : List.of())
+                .subjectTimes(
+                        openLibraryResponse.subject_times() != null ?
+                                openLibraryResponse.subject_times().stream().map(OpenLibraryResponse.SubjectTimes::name).toList()
+                                : List.of())
+                .excerpts(
+                        openLibraryResponse.excerpts() != null ?
+                                openLibraryResponse.excerpts().stream().map(excerpt -> new BookResponse.Excerpts(excerpt.text(), excerpt.comment())).toList() : List.of())
                 .subtitle(openLibraryResponse.subtitle())
                 .publishedDate(openLibraryResponse.publish_date())
                 .imageUrl(openLibraryResponse.cover() != null ? openLibraryResponse.cover().large() : null)

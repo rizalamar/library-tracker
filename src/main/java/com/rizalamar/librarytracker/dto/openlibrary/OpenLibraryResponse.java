@@ -10,11 +10,11 @@ public record OpenLibraryResponse(
         List<Author> authors,
         List<Publisher> publishers,
         Integer number_of_pages,
-        List<String> subjects,
-        List<String> subject_places,
-        List<String> subject_people,
-        List<String> subject_times,
-        List<String> excerpts,
+        List<Subject> subjects,
+        List<SubjectPlace> subject_places,
+        List<SubjectPeople> subject_people,
+        List<SubjectTimes> subject_times,
+        List<Excerpt> excerpts,
         String publish_date,
         Cover cover,
         String subtitle
@@ -22,4 +22,9 @@ public record OpenLibraryResponse(
     public record Author(String url, String name){}
     public record Cover(String large, String medium, String small){}
     public record Publisher(String name) {}
+    public record Subject(String name){}
+    public record SubjectPlace(String name){}
+    public record SubjectPeople(String name){}
+    public record SubjectTimes(String name){}
+    public record Excerpt(String text, String comment){}
 }
