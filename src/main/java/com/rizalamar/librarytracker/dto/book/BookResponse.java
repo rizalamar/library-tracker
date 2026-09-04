@@ -26,7 +26,7 @@ public record BookResponse(
         boolean available,
         LocalDateTime createdAt
 ) {
-    public record Author(String url, String name){}
+    public record Author(String name, String url){}
     public record Publishers(String name){}
     public record Excerpts(String text, String comment){}
 }
