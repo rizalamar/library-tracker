@@ -158,7 +158,8 @@ public class BookService {
                 .authors(
                         book.getAuthors() != null ?
                                 book.getAuthors().stream().map(author ->
-                                        new BookResponse.Author(author.getUrl(), author.getName())).toList()
+                                        new BookResponse.Author(author.getName(), author.getUrl())
+                                ).toList()
                                 : List.of()
                 )
                 .isbn(book.getIsbn())
