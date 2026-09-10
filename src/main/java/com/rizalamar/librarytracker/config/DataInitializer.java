@@ -110,7 +110,181 @@ public class DataInitializer implements CommandLineRunner {
                     .imageUrl("https://covers.openlibrary.org/b/id/15152634-L.jpg")
                     .build();
 
-            bookRepository.saveAll(List.of(book1, book2, book3));
+            Book book4 = Book.builder()
+                    .title("The Great Gatsby")
+                    .isbn("9780743273565")
+                    .authors(
+                            List.of(
+                                    Author.builder()
+                                            .name("F. Scott Fitzgerald")
+                                            .build()
+                            )
+                    )
+                    .publishers(
+                            List.of(
+                                    Publisher.builder()
+                                            .name("Independently Published")
+                                            .build()
+                            )
+                    )
+                    .publishedDate("2021")
+                    .imageUrl("https://covers.openlibrary.org/b/id/14314120-L.jpg")
+                    .available(true)
+                    .build();
+
+            Book book5 = Book.builder()
+                    .title("1984")
+                    .isbn("9780451524935")
+                    .authors(
+                            List.of(
+                                    Author.builder()
+                                            .name("George Orwell")
+                                            .build()
+                            )
+                    )
+                    .publishers(
+                            List.of(
+                                    Publisher.builder()
+                                            .name("Signet Classic")
+                                            .build()
+                            )
+                    )
+                    .publishedDate("1993")
+                    .imageUrl("https://covers.openlibrary.org/b/id/12054527-L.jpg")
+                    .available(true)
+                    .build();
+
+            Book book6 = Book.builder()
+                    .title("The Hobbit")
+                    .isbn("9780547928227")
+                    .authors(
+                            List.of(
+                                    Author.builder()
+                                            .name("J.R.R. Tolkien")
+                                            .build()
+                            )
+                    )
+                    .publishers(
+                            List.of(
+                                    Publisher.builder()
+                                            .name("Mariner Books")
+                                            .build()
+                            )
+                    )
+                    .publishedDate("2012")
+                    .imageUrl("https://covers.openlibrary.org/b/id/12003329-L.jpg")
+                    .available(true)
+                    .build();
+
+            Book book7 = Book.builder()
+                    .title("Killing Floor")
+                    .isbn("9780515141429")
+                    .authors(
+                            List.of(
+                                    Author.builder()
+                                            .name("Lee Child")
+                                            .build()
+                            )
+                    )
+                    .publishers(
+                            List.of(
+                                    Publisher.builder()
+                                            .name("Jove Books")
+                                            .build()
+                            )
+                    )
+                    .publishedDate("2018")
+                    .imageUrl("https://covers.openlibrary.org/b/id/14424676-L.jpg")
+                    .available(true)
+                    .build();
+
+            Book book8 = Book.builder()
+                    .title("Thinking, Fast and Slow")
+                    .isbn("9780374533557")
+                    .authors(
+                            List.of(
+                                    Author.builder()
+                                            .name("Daniel Kahneman")
+                                            .build()
+                            )
+                    )
+                    .publishers(
+                            List.of(
+                                    Publisher.builder()
+                                            .name("Farrar, Straus and Giroux").build()
+                            )
+                    )
+                    .publishedDate("April 2, 2013")
+                    .imageUrl("https://covers.openlibrary.org/b/id/7889800-L.jpg")
+                    .available(true)
+                    .build();
+
+            Book book9 = Book.builder()
+                    .title("Educated")
+                    .isbn("9780399590504")
+                    .authors(
+                            List.of(
+                                    Author.builder()
+                                            .name("Sarah Fields")
+                                            .build()
+                            )
+                    )
+                    .publishers(
+                            List.of(Publisher.builder()
+                                    .name("Blurb")
+                                    .build()
+                            )
+                    )
+                    .publishedDate("2018")
+                    .imageUrl("https://covers.openlibrary.org/b/id/14832082-L.jpg")
+                    .available(true)
+                    .build();
+
+            Book book10 = Book.builder()
+                    .title("The Alchemist")
+                    .isbn("9780062315007")
+                    .authors(
+                            List.of(
+                                    Author.builder()
+                                            .name("Paulo Coelho")
+                                            .build()
+                            )
+                    )
+                    .publishers(
+                            List.of(
+                                    Publisher.builder()
+                                            .name("HarperCollins Publishers")
+                                            .build()
+                            )
+                    )
+                    .publishedDate("2014")
+                    .imageUrl("https://covers.openlibrary.org/b/id/15091614-L.jpg")
+                    .available(true)
+                    .build();
+
+            Book book11 = Book.builder()
+                    .title("Sapiens")
+                    .isbn("9780062316097")
+                    .authors(
+                            List.of(
+                                    Author.builder()
+                                            .name("Yuval Noah Harari")
+                                            .build()
+                            )
+                    )
+                    .publishers(
+                            List.of(
+                                    Publisher.builder()
+                                            .name("Harper")
+                                            .build()
+                            )
+                    )
+                    .publishedDate("2011")
+                    .imageUrl("https://covers.openlibrary.org/b/id/14369194-L.jpg")
+                    .available(true)
+                    .build();
+
+            bookRepository.saveAll(List.of(book1, book2, book3, book4, book5, book6, book7, book8, book9, book10, book11));
             log.info("Sample books initialized.");
         }
     }
