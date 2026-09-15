@@ -5,6 +5,7 @@ import com.rizalamar.librarytracker.domain.Book;
 import com.rizalamar.librarytracker.domain.Publisher;
 import com.rizalamar.librarytracker.dto.book.BookRequest;
 import com.rizalamar.librarytracker.dto.book.BookResponse;
+import com.rizalamar.librarytracker.dto.book.GenreResponse;
 import com.rizalamar.librarytracker.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

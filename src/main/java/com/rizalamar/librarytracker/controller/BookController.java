@@ -3,6 +3,7 @@ package com.rizalamar.librarytracker.controller;
 import com.rizalamar.librarytracker.dto.WebResponse;
 import com.rizalamar.librarytracker.dto.book.BookRequest;
 import com.rizalamar.librarytracker.dto.book.BookResponse;
+import com.rizalamar.librarytracker.dto.book.GenreResponse;
 import com.rizalamar.librarytracker.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -85,5 +86,17 @@ public class BookController {
                         .data("Book deleted successful")
                         .build()
         );
+    }
+
+    @GetMapping
+    public ResponseEntity<WebResponse<List<GenreResponse>>> getGenres(){
+        List<GenreResponse> genreCounts = bookService.getGenreCounts();
+        return ResponseEntity.ok(
+                WebResponse.<List<GenreResponse>>builder()
+                        .code(HttpStatus.OK.value())
+                        .status("OK")
+                        .data(genreCounts)
+                        .build()
+        )
     }
 }
