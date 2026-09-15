@@ -1,6 +1,7 @@
 package com.rizalamar.librarytracker.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rizalamar.librarytracker.config.GenreNormalizer;
 import com.rizalamar.librarytracker.dto.book.BookResponse;
 import com.rizalamar.librarytracker.dto.openlibrary.OpenLibraryResponse;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ public class OpenLibraryService {
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
     private static final String OPEN_LIBRARY_API = "https://openlibrary.org/api/books?bibkeys=ISBN:%s&format=json&jscmd=data";
+    private final GenreNormalizer genreNormalizer;
 
     @Cacheable(value = "bookMetadata", key = "#isbn")
     public BookResponse fetchBookByIsbn(String isbn){
@@ -33,6 +35,14 @@ public class OpenLibraryService {
         Object data = responseMap.get("ISBN:" + isbn);
         OpenLibraryResponse openLibraryResponse = objectMapper.convertValue(data, OpenLibraryResponse.class);
 
+        List<OpenLibraryResponse.Subject> rawSubjects = openLibraryResponse.subjects();
+
+        List<String> subjectNames = rawSubjects != null ?
+                rawSubjects.stream().map(subject -> subject.name()).toList()
+                : List.of();
+
+        List<String> cleanGenres = genreNormalizer.normalize(subjectNames);
+
         return BookResponse.builder()
                 .title(openLibraryResponse.title())
                 .authors(
@@ -45,11 +55,7 @@ public class OpenLibraryService {
                                 openLibraryResponse.publishers().stream().map(publisher -> new BookResponse.Publishers(publisher.name())).toList() : List.of()
                         )
                 .number_of_pages(openLibraryResponse.number_of_pages())
-                .subjects(
-                        openLibraryResponse.subjects() != null ?
-                                openLibraryResponse.subjects().stream().map(OpenLibraryResponse.Subject::name).toList()
-                                : List.of()
-                )
+                .subjects(cleanGenres)
                 .subjectPlaces(
                         openLibraryResponse.subject_places() != null ?
                                 openLibraryResponse.subject_places().stream().map(OpenLibraryResponse.SubjectPlace::name).toList()
