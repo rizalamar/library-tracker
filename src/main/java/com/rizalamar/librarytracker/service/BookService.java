@@ -45,6 +45,7 @@ public class BookService {
         return allEnrichmentBooks;
     }
 
+    @Transactional(readOnly = true)
     public List<GenreResponse> getGenreCounts(){
         List<Book> books = bookRepository.findAll();
         List<BookResponse> allEnrichmentBooks = books.stream()
@@ -78,7 +79,7 @@ public class BookService {
                                         .url(author.url())
                                         .name(author.name())
                                         .build()
-                        ).collect(Collectors.toList())
+                        ).collect(Collectors.toSet())
                 )
                 .isbn(request.isbn())
                 .subtitle(request.subtitle())
@@ -88,7 +89,7 @@ public class BookService {
                                         Publisher.builder()
                                                 .name(publisher.name())
                                                 .build()
-                                ).collect(Collectors.toList())
+                                ).collect(Collectors.toSet())
                 )
                 .publishedDate(request.publishedDate())
                 .imageUrl(request.imageUrl())
@@ -115,7 +116,7 @@ public class BookService {
                                             .url(author.url())
                                             .name(author.name())
                                             .build()
-                            ).collect(Collectors.toList())
+                            ).collect(Collectors.toSet())
             );
         }
 
@@ -134,7 +135,7 @@ public class BookService {
                                     Publisher.builder()
                                             .name(publisher.name())
                                             .build()
-                            ).collect(Collectors.toList())
+                            ).collect(Collectors.toSet())
             );
         }
 

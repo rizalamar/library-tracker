@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.Set;
 
 @Configuration
 @RequiredArgsConstructor
@@ -48,7 +49,7 @@ public class DataInitializer implements CommandLineRunner {
 
         if(bookRepository.count() == 0) {
             InputStream is = new ClassPathResource("books.json").getInputStream();
-            List<Book> books = mapper.readValue(is, new TypeReference<List<Book>>() {
+            Set<Book> books = mapper.readValue(is, new TypeReference<>() {
             });
 
             bookRepository.saveAll(books);
