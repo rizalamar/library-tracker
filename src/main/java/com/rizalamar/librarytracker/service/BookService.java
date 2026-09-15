@@ -14,8 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -26,9 +28,34 @@ public class BookService {
     private final OpenLibraryService openLibraryService;
 
     @Transactional(readOnly = true)
-    public List<BookResponse> getAllBooks() {
-        return bookRepository.findAll().stream()
+    public List<BookResponse> getAllBooks(String genre) {
+        List<Book> books = bookRepository.findAll();
+
+        List<BookResponse> allEnrichmentBooks = books.stream()
                 .map(this::mapToEnrichmentResponse)
+                .toList();
+
+        if (genre != null && !genre.isEmpty()) {
+            return allEnrichmentBooks.stream()
+                    .filter(b -> b.subjects().contains(genre))
+                    .collect(Collectors.toList());
+        }
+
+        return allEnrichmentBooks;
+    }
+
+    public List<GenreResponse> getGenreCounts(){
+        List<Book> books = bookRepository.findAll();
+        List<BookResponse> allEnrichmentBooks = books.stream()
+                .map(book -> mapToEnrichmentResponse(book))
+                .toList();
+
+        Map<String, Long> genreCounter = allEnrichmentBooks.stream()
+                .flatMap(bookResponse -> bookResponse.subjects().stream())
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+        return genreCounter.entrySet().stream()
+                .map(entry -> new GenreResponse(entry.getKey(), entry.getValue()))
                 .collect(Collectors.toList());
     }
 
