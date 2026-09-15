@@ -419,5 +419,56 @@
         "name": "Anchor"
       }
     ]
+  },
+  {
+    "title": "Batman",
+    "isbn": "9781845767723",
+    "publishedDate": "2008-04-25",
+    "imageUrl": "https://covers.openlibrary.org/b/id/14485564-L.jpg",
+    "authors": [
+      {
+        "name": "Alan Moore",
+        "url": "http://openlibrary.org/authors/OL440715A/Alan_Moore"
+      },
+      {
+        "name": "Brian Bolland",
+        "url": "http://openlibrary.org/authors/OL274740A/Brian_Bolland"
+      },
+      {
+        "name": "John Higgins",
+        "url": "http://openlibrary.org/authors/OL324142A/John_Higgins"
+      },
+      {
+        "name": "Richard Starkings",
+        "url": "http://openlibrary.org/authors/OL3028138A/Richard_Starkings"
+      }
+    ],
+    "publishers": [
+      {
+        "name": "Titan"
+      }
+    ]
+  },
+  {
+    "title": "Batman",
+    "isbn": "9781401207526",
+    "publishedDate": "2005",
+    "imageUrl": "https://covers.openlibrary.org/b/id/749310-L.jpg",
+    "authors": [
+      {
+        "name": "Frank Miller",
+        "url": "http://openlibrary.org/authors/OL2598986A/Frank_Miller"
+      },
+      {
+        "name": "David Mazzucchelli",
+        "url": "http://openlibrary.org/authors/OL2710854A/David_Mazzucchelli"
+      }
+    ],
+    "publishers": [
+      {
+        "name": "DC Comics"
+      }
+    ],
+    "subtitle": "Year One"
   }
 ]
