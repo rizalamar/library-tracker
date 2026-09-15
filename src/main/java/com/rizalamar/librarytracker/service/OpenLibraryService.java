@@ -37,7 +37,7 @@ public class OpenLibraryService {
                 .title(openLibraryResponse.title())
                 .authors(
                         openLibraryResponse.authors() != null ?
-                                openLibraryResponse.authors().stream().map(author -> new BookResponse.Author(author.url(), author.name())).toList() : List.of()
+                                openLibraryResponse.authors().stream().map(author -> new BookResponse.Author(author.name(), author.url())).toList() : List.of()
                         )
                 .isbn(isbn)
                 .publishers(

@@ -1,0 +1,423 @@
+[
+  {
+    "title": "Clean Code",
+    "isbn": "978-0132350884",
+    "authors": [
+      {
+        "name": "Robert C. Martin",
+        "url": "http://openlibrary.org/authors/OL2653686A/Robert_C._Martin"
+      }
+    ],
+    "publishers": [
+      {
+        "name": "Prentice Hall"
+      }
+    ],
+    "subtitle": "A Handbook of Agile Software Craftsmanship",
+    "publishedDate": "July 2008",
+    "imageUrl": "https://covers.openlibrary.org/b/id/15126503-L.jpg"
+  },
+  {
+    "title": "The Pragmatic Programmer",
+    "isbn": "9780201616224",
+    "subtitle": "From Journeyman to Master",
+    "publishedDate": "1999",
+    "imageUrl": "https://covers.openlibrary.org/b/id/7386133-L.jpg",
+    "authors": [
+      {
+        "name": "Andy Hunt",
+        "url": "http://openlibrary.org/authors/OL1391034A/Andy_Hunt"
+      },
+      {
+        "name": "Dave Thomas",
+        "url": "http://openlibrary.org/authors/OL1439324A/Dave_Thomas"
+      }
+    ],
+    "publishers": [
+      {
+        "name": "Addison-Wesley"
+      }
+    ]
+  },
+  {
+    "title": "Fantastic Mr. Fox",
+    "isbn": "9780140328721",
+    "publishedDate": "October 1, 1988",
+    "imageUrl": "https://covers.openlibrary.org/b/id/15152634-L.jpg",
+    "authors": [
+      {
+        "name": "Roald Dahl",
+        "url": "http://openlibrary.org/authors/OL34184A/Roald_Dahl"
+      }
+    ],
+    "publishers": [
+      {
+        "name": "Puffin"
+      }
+    ]
+  },
+  {
+    "title": "The Great Gatsby",
+    "isbn": "9780743273565",
+    "publishedDate": "2021",
+    "imageUrl": "https://covers.openlibrary.org/b/id/14314120-L.jpg",
+    "authors": [
+      {
+        "name": "F. Scott Fitzgerald"
+      }
+    ],
+    "publishers": [
+      {
+        "name": "Independently Published"
+      }
+    ],
+    "available": true
+  },
+  {
+    "title": "1984",
+    "isbn": "9780451524935",
+    "publishedDate": "1993",
+    "imageUrl": "https://covers.openlibrary.org/b/id/12054527-L.jpg",
+    "authors": [
+      {
+        "name": "George Orwell"
+      }
+    ],
+    "publishers": [
+      {
+        "name": "Signet Classic"
+      }
+    ],
+    "available": true
+  },
+  {
+    "title": "The Hobbit",
+    "isbn": "9780547928227",
+    "publishedDate": "2012",
+    "imageUrl": "https://covers.openlibrary.org/b/id/12003329-L.jpg",
+    "authors": [
+      {
+        "name": "J.R.R. Tolkien"
+      }
+    ],
+    "publishers": [
+      {
+        "name": "Mariner Books"
+      }
+    ],
+    "available": true
+  },
+  {
+    "title": "Killing Floor",
+    "isbn": "9780515141429",
+    "publishedDate": "2018",
+    "imageUrl": "https://covers.openlibrary.org/b/id/14424676-L.jpg",
+    "authors": [
+      {
+        "name": "Lee Child"
+      }
+    ],
+    "publishers": [
+      {
+        "name": "Jove Books"
+      }
+    ],
+    "available": true
+  },
+  {
+    "title": "Thinking, Fast and Slow",
+    "isbn": "9780374533557",
+    "publishedDate": "April 2, 2013",
+    "imageUrl": "https://covers.openlibrary.org/b/id/7889800-L.jpg",
+    "authors": [
+      {
+        "name": "Daniel Kahneman"
+      }
+    ],
+    "publishers": [
+      {
+        "name": "Farrar, Straus and Giroux"
+      }
+    ],
+    "available": true
+  },
+  {
+    "title": "Educated",
+    "isbn": "9780399590504",
+    "publishedDate": "2018",
+    "imageUrl": "https://covers.openlibrary.org/b/id/14832082-L.jpg",
+    "authors": [
+      {
+        "name": "Sarah Fields"
+      }
+    ],
+    "publishers": [
+      {
+        "name": "Blurb"
+      }
+    ],
+    "available": true
+  },
+  {
+    "title": "The Alchemist",
+    "isbn": "9780062315007",
+    "publishedDate": "2014",
+    "imageUrl": "https://covers.openlibrary.org/b/id/15091614-L.jpg",
+    "authors": [
+      {
+        "name": "Paulo Coelho"
+      }
+    ],
+    "publishers": [
+      {
+        "name": "HarperCollins Publishers"
+      }
+    ],
+    "available": true
+  },
+  {
+    "title": "Sapiens",
+    "isbn": "9780062316097",
+    "publishedDate": "2011",
+    "imageUrl": "https://covers.openlibrary.org/b/id/14369194-L.jpg",
+    "authors": [
+      {
+        "name": "Yuval Noah Harari"
+      }
+    ],
+    "publishers": [
+      {
+        "name": "Harper"
+      }
+    ],
+    "available": true
+  },
+  {
+    "title": "Brave New World",
+    "isbn": "9780060850524",
+    "publishedDate": "1932",
+    "imageUrl": "https://covers.openlibrary.org/b/id/12992919-L.jpg",
+    "authors": [
+      {
+        "name": "Aldous Huxley",
+        "url": "http://openlibrary.org/authors/OL19767A/Aldous_Huxley"
+      }
+    ],
+    "publishers": [
+      {
+        "name": "Harper Perennial"
+      }
+    ]
+  },
+  {
+    "title": "Dune",
+    "isbn": "9780441172719",
+    "publishedDate": "2020",
+    "imageUrl": "https://covers.openlibrary.org/b/id/15110282-L.jpg",
+    "authors": [
+      {
+        "name": "Frank Herbert",
+        "url": "http://openlibrary.org/authors/OL79034A/Frank_Herbert"
+      }
+    ],
+    "publishers": [
+      {
+        "name": "Chilton Books"
+      }
+    ]
+  },
+  {
+    "title": "The Catcher in the Rye",
+    "isbn": "9780316769488",
+    "publishedDate": "1991",
+    "imageUrl": "https://covers.openlibrary.org/b/id/15172531-L.jpg",
+    "authors": [
+      {
+        "name": "J. D. Salinger",
+        "url": "http://openlibrary.org/authors/OL540486A/J._D._Salinger"
+      },
+      {
+        "name": "Shao jia yun",
+        "url": "http://openlibrary.org/authors/OL7766520A/Shao_jia_yun"
+      }
+    ],
+    "publishers": [
+      {
+        "name": "Little, Brown and Company"
+      }
+    ]
+  },
+  {
+    "title": "To Kill a Mockingbird",
+    "isbn": "9780061120084",
+    "publishedDate": "2006",
+    "imageUrl": "https://covers.openlibrary.org/b/id/15162569-L.jpg",
+    "authors": [
+      {
+        "name": "Harper Lee",
+        "url": "http://openlibrary.org/authors/OL498120A/Harper_Lee"
+      }
+    ],
+    "publishers": [
+      {
+        "name": "Harper Perennial Modern Classics"
+      }
+    ]
+  },
+  {
+    "title": "Pride and Prejudice",
+    "isbn": "9780141439518",
+    "publishedDate": "2003",
+    "imageUrl": "https://covers.openlibrary.org/b/id/12645114-L.jpg",
+    "authors": [
+      {
+        "name": "Jane Austen",
+        "url": "http://openlibrary.org/authors/OL21594A/Jane_Austen"
+      }
+    ],
+    "publishers": [
+      {
+        "name": "Penguin Books"
+      }
+    ]
+  },
+  {
+    "title": "The Road",
+    "isbn": "9780307265432",
+    "publishedDate": "2006",
+    "imageUrl": "https://covers.openlibrary.org/b/id/15235435-L.jpg",
+    "authors": [
+      {
+        "name": "Cormac McCarthy",
+        "url": "http://openlibrary.org/authors/OL28104A/Cormac_McCarthy"
+      }
+    ],
+    "publishers": [
+      {
+        "name": "Alfred A. Knopf"
+      }
+    ]
+  },
+  {
+    "title": "Beloved",
+    "isbn": "9781400033416",
+    "publishedDate": "2025",
+    "imageUrl": "https://covers.openlibrary.org/b/id/15248310-L.jpg",
+    "authors": [
+      {
+        "name": "Toni Morrison",
+        "url": "http://openlibrary.org/authors/OL31120A/Toni_Morrison"
+      }
+    ],
+    "publishers": [
+      {
+        "name": "Vintage International"
+      }
+    ]
+  },
+  {
+    "title": "The Shining",
+    "isbn": "9780307743657",
+    "publishedDate": "2012",
+    "imageUrl": "https://covers.openlibrary.org/b/id/14654468-L.jpg",
+    "authors": [
+      {
+        "name": "Stephen King",
+        "url": "http://openlibrary.org/authors/OL19981A/Stephen_King"
+      }
+    ],
+    "publishers": [
+      {
+        "name": "Anchor Books"
+      }
+    ]
+  },
+  {
+    "title": "A Game of Thrones",
+    "isbn": "9780553103540",
+    "publishedDate": "2011",
+    "imageUrl": "https://covers.openlibrary.org/b/id/11293305-L.jpg",
+    "authors": [
+      {
+        "name": "George R. R. Martin",
+        "url": "http://openlibrary.org/authors/OL234664A/George_R._R._Martin"
+      }
+    ],
+    "publishers": [
+      {
+        "name": "Harper Voyager"
+      }
+    ]
+  },
+  {
+    "title": "Norwegian Wood",
+    "isbn": "9780375704024",
+    "publishedDate": "2000",
+    "imageUrl": "https://covers.openlibrary.org/b/id/6376119-L.jpg",
+    "authors": [
+      {
+        "name": "村上春樹",
+        "url": "http://openlibrary.org/authors/OL382524A/村上春樹"
+      }
+    ],
+    "publishers": [
+      {
+        "name": "Vintage"
+      },
+      {
+        "name": "Vintage International"
+      }
+    ]
+  },
+  {
+    "title": "The Book Thief",
+    "isbn": "9780375842207",
+    "publishedDate": "2007-09",
+    "imageUrl": "https://covers.openlibrary.org/b/id/14551245-L.jpg",
+    "authors": [
+      {
+        "name": "Markus Zusak",
+        "url": "http://openlibrary.org/authors/OL1425869A/Markus_Zusak"
+      }
+    ],
+    "publishers": [
+      {
+        "name": "Alfred A. Knopf"
+      }
+    ]
+  },
+  {
+    "title": "Life of Pi",
+    "isbn": "9780156027328",
+    "publishedDate": "2003",
+    "imageUrl": "https://covers.openlibrary.org/b/id/8082619-L.jpg",
+    "authors": [
+      {
+        "name": "Yann Martel",
+        "url": "http://openlibrary.org/authors/OL422052A/Yann_Martel"
+      }
+    ],
+    "publishers": [
+      {
+        "name": "Harcourt"
+      }
+    ]
+  },
+  {
+    "title": "The Da Vinci Code",
+    "isbn": "9780307474278",
+    "publishedDate": "March 31, 2009",
+    "imageUrl": "https://covers.openlibrary.org/b/id/6301424-L.jpg",
+    "authors": [
+      {
+        "name": "Dan Brown",
+        "url": "http://openlibrary.org/authors/OL39307A/Dan_Brown"
+      }
+    ],
+    "publishers": [
+      {
+        "name": "Anchor"
+      }
+    ]
+  }
+]
