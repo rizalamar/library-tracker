@@ -88,7 +88,7 @@ public class BookController {
         );
     }
 
-    @GetMapping
+    @GetMapping("/genres")
     public ResponseEntity<WebResponse<List<GenreResponse>>> getGenres(){
         List<GenreResponse> genreCounts = bookService.getGenreCounts();
         return ResponseEntity.ok(
