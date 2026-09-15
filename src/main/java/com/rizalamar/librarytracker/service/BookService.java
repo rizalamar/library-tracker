@@ -48,7 +48,7 @@ public class BookService {
     public List<GenreResponse> getGenreCounts(){
         List<Book> books = bookRepository.findAll();
         List<BookResponse> allEnrichmentBooks = books.stream()
-                .map(book -> mapToEnrichmentResponse(book))
+                .map(this::mapToEnrichmentResponse)
                 .toList();
 
         Map<String, Long> genreCounter = allEnrichmentBooks.stream()

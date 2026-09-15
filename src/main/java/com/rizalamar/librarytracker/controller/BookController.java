@@ -22,8 +22,8 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping
-    public ResponseEntity<WebResponse<List<BookResponse>> > getAllBooks(){
-        List<BookResponse> allBooks = bookService.getAllBooks();
+    public ResponseEntity<WebResponse<List<BookResponse>> > getAllBooks(String genre){
+        List<BookResponse> allBooks = bookService.getAllBooks(genre);
         return ResponseEntity.ok(
                 WebResponse.<List<BookResponse>>builder()
                 .code(HttpStatus.OK.value())
@@ -97,6 +97,6 @@ public class BookController {
                         .status("OK")
                         .data(genreCounts)
                         .build()
-        )
+        );
     }
 }
