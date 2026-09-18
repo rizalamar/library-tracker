@@ -168,11 +168,11 @@ public class BookService {
 
             return baseBookResponse.toBuilder()
                     .number_of_pages(enriched.number_of_pages())
-                    .subjects(enriched.subjects())
-                    .subjectPlaces(enriched.subjectPlaces())
-                    .subjectsPeople(enriched.subjectsPeople())
-                    .subjectTimes(enriched.subjectTimes())
-                    .excerpts(enriched.excerpts())
+                    .subjects( enriched.subjects() != null ? enriched.subjects() : List.of())
+                    .subjectPlaces(enriched.subjectPlaces() != null ? enriched.subjectPlaces() : List.of())
+                    .subjectsPeople(enriched.subjectsPeople() != null ? enriched.subjectsPeople() : List.of())
+                    .subjectTimes(enriched.subjectTimes() != null ? enriched.subjectTimes() : List.of())
+                    .excerpts(enriched.excerpts() != null ? enriched.excerpts() : List.of())
                     .build();
         } catch (Exception e){
             System.out.printf("Enrichment data failed %s: %s", book.getIsbn(), e.getMessage());

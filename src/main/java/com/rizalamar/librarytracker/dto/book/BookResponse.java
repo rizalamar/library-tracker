@@ -1,6 +1,5 @@
 package com.rizalamar.librarytracker.dto.book;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
@@ -26,7 +25,12 @@ public record BookResponse(
         boolean available,
         LocalDateTime createdAt
 ) {
-    public record Author(String name, String url){}
-    public record Publishers(String name){}
-    public record Excerpts(String text, String comment){}
+    public record Author(String name, String url) {
+    }
+
+    public record Publishers(String name) {
+    }
+
+    public record Excerpts(String text, String comment) {
+    }
 }
