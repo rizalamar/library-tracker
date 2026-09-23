@@ -1,30 +1,45 @@
 package com.rizalamar.librarytracker.dto.openlibrary;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.List;
+import java.util.Objects;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record OpenLibraryResponse(
         String title,
-        List<Author> authors,
-        List<Publisher> publishers,
-        Integer number_of_pages,
-        List<Subject> subjects,
-        List<SubjectPlace> subject_places,
-        List<SubjectPeople> subject_people,
-        List<SubjectTimes> subject_times,
-        List<Excerpt> excerpts,
         String publish_date,
-        Cover cover,
-        String subtitle
+        Integer number_of_pages,
+        String physical_format,
+        JsonNode description,
+        List<Integer> covers,
+        List<String> publishers,
+        List<String> publish_places,
+        List<Ref> languages,
+        List<Ref> authors,
+        List<Ref> works,
+        List<String> isbn_10,
+        List<String> isbn_13
 ) {
-    public record Author(String url, String name){}
-    public record Cover(String large, String medium, String small){}
-    public record Publisher(String name) {}
-    public record Subject(String name){}
-    public record SubjectPlace(String name){}
-    public record SubjectPeople(String name){}
-    public record SubjectTimes(String name){}
-    public record Excerpt(String text, String comment){}
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public record Ref(String key){}
+
+    public String descriptionText(){
+        if(description == null) return null;
+        if(description.isTextual()) return description.asText();
+        if(description.has("value")) return description.get("value").asText();
+
+        return null;
+    }
+
+    public List<String> languagesCode(){
+        if(languages == null) return List.of();
+
+        return languages.stream()
+                .map(language -> language.key)
+                .filter(Objects::nonNull)
+                .map(k -> k.substring(k.lastIndexOf('/') + 1))
+                .toList();
+    }
 }

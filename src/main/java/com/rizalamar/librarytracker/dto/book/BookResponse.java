@@ -11,7 +11,6 @@ public record BookResponse(
         UUID id,
         String title,
         String isbn,
-        String subtitle,
         List<Author> authors,
         List<Publishers> publishers,
         Integer number_of_pages,

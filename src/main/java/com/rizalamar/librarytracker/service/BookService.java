@@ -38,7 +38,7 @@ public class BookService {
 
         if (genre != null && !genre.isEmpty()) {
             return allEnrichmentBooks.stream()
-                    .filter(b -> b.subjects().contains(genre))
+                    .filter(b -> b.subjects() != null && b.subjects().contains(genre))
                     .collect(Collectors.toList());
         }
 
@@ -46,7 +46,7 @@ public class BookService {
     }
 
     @Transactional(readOnly = true)
-    public List<GenreResponse> getGenreCounts(){
+    public List<GenreResponse> getGenreCounts() {
         List<Book> books = bookRepository.findAll();
         List<BookResponse> allEnrichmentBooks = books.stream()
                 .map(this::mapToEnrichmentResponse)
@@ -168,13 +168,13 @@ public class BookService {
 
             return baseBookResponse.toBuilder()
                     .number_of_pages(enriched.number_of_pages())
-                    .subjects( enriched.subjects() != null ? enriched.subjects() : List.of())
+                    .subjects(enriched.subjects() != null ? enriched.subjects() : List.of())
                     .subjectPlaces(enriched.subjectPlaces() != null ? enriched.subjectPlaces() : List.of())
                     .subjectsPeople(enriched.subjectsPeople() != null ? enriched.subjectsPeople() : List.of())
                     .subjectTimes(enriched.subjectTimes() != null ? enriched.subjectTimes() : List.of())
                     .excerpts(enriched.excerpts() != null ? enriched.excerpts() : List.of())
                     .build();
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.printf("Enrichment data failed %s: %s", book.getIsbn(), e.getMessage());
             return baseBookResponse;
         }
@@ -203,6 +203,12 @@ public class BookService {
                 .imageUrl(book.getImageUrl())
                 .available(book.isAvailable())
                 .createdAt(book.getCreatedAt())
+//                .number_of_pages(0)
+//                .subjects(List.of())
+//                .subjectPlaces(List.of())
+//                .subjectsPeople(List.of())
+//                .subjectTimes(List.of())
+//                .excerpts(List.of())
                 .build();
     }
 }

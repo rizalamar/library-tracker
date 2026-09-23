@@ -22,7 +22,9 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping
-    public ResponseEntity<WebResponse<List<BookResponse>> > getAllBooks(String genre){
+    public ResponseEntity<WebResponse<List<BookResponse>> > getAllBooks(
+            @RequestParam(value = "genre", required = false) String genre
+    ){
         List<BookResponse> allBooks = bookService.getAllBooks(genre);
         return ResponseEntity.ok(
                 WebResponse.<List<BookResponse>>builder()
