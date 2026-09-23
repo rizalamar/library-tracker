@@ -11,14 +11,17 @@ public record BookResponse(
         UUID id,
         String title,
         String isbn,
+        String description,
         List<Author> authors,
-        List<Publishers> publishers,
+        List<String> publishers,
         Integer number_of_pages,
+        String physicalFormat,
+        List<String> languages,
+        List<String> publishPlaces,
         List<String> subjects,
         List<String> subjectsPeople,
         List<String> subjectPlaces,
         List<String> subjectTimes,
-        List<Excerpts> excerpts,
         String publishedDate,
         String imageUrl,
         boolean available,
@@ -27,9 +30,4 @@ public record BookResponse(
     public record Author(String name, String url) {
     }
 
-    public record Publishers(String name) {
-    }
-
-    public record Excerpts(String text, String comment) {
-    }
 }
