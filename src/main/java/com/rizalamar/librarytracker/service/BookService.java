@@ -203,12 +203,6 @@ public class BookService {
                 .imageUrl(book.getImageUrl())
                 .available(book.isAvailable())
                 .createdAt(book.getCreatedAt())
-//                .number_of_pages(0)
-//                .subjects(List.of())
-//                .subjectPlaces(List.of())
-//                .subjectsPeople(List.of())
-//                .subjectTimes(List.of())
-//                .excerpts(List.of())
                 .build();
     }
 }
