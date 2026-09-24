@@ -15,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Slf4j
 @Service
@@ -69,7 +70,7 @@ public class OpenLibraryService {
                 .publishers(nullSafe(edition.publishers()))
                 .number_of_pages(edition.number_of_pages())
                 .physicalFormat(edition.physical_format())
-                .languages(edition.languagesCode())
+                .languages(toLanguageNames(edition.languagesCode()))
                 .publishPlaces(nullSafe(edition.publish_places()))
                 .subjects(cleanGenres)
                 .subjectsPeople(work != null ? nullSafe(work.subject_people()) : List.of())
@@ -128,5 +129,12 @@ public class OpenLibraryService {
 
     private static List<String> nullSafe(List<String> list){
         return list != null ? list : List.of();
+    }
+
+    private static  List<String> toLanguageNames(List<String> codes){
+        return codes.stream()
+                .map(code -> Locale.forLanguageTag(code).getDisplayLanguage(Locale.ENGLISH))
+                .filter(name -> name != null && !name.isBlank())
+                .toList();
     }
 }
