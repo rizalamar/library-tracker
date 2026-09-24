@@ -20,6 +20,7 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -53,7 +54,9 @@ public class BookService {
                 .toList();
 
         Map<String, Long> genreCounter = allEnrichmentBooks.stream()
-                .flatMap(bookResponse -> bookResponse.subjects().stream())
+                .flatMap(bookResponse -> bookResponse.subjects() != null
+                        ? bookResponse.subjects().stream()
+                        : Stream.<String>empty())
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
         return genreCounter.entrySet().stream()
@@ -162,6 +165,10 @@ public class BookService {
 
             return baseBookResponse.toBuilder()
                     .number_of_pages(enriched.number_of_pages())
+                    .description(enriched.description())
+                    .physicalFormat(enriched.physicalFormat())
+                    .languages(enriched.languages() != null ? enriched.languages() : List.of())
+                    .publishPlaces(enriched.publishPlaces() != null ? enriched.publishPlaces() : List.of())
                     .subjects(enriched.subjects() != null ? enriched.subjects() : List.of())
                     .subjectPlaces(enriched.subjectPlaces() != null ? enriched.subjectPlaces() : List.of())
                     .subjectsPeople(enriched.subjectsPeople() != null ? enriched.subjectsPeople() : List.of())
@@ -185,7 +192,9 @@ public class BookService {
                                 : List.of()
                 )
                 .isbn(book.getIsbn())
-                .publishers(book.getPublishers().stream().map(Publisher::getName).toList())
+                .publishers(book.getPublishers() != null
+                        ? book.getPublishers().stream().map(Publisher::getName).toList()
+                        : List.of())
                 .publishedDate(book.getPublishedDate())
                 .imageUrl(book.getImageUrl())
                 .available(book.isAvailable())
