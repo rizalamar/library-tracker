@@ -25,9 +25,6 @@ public class Book extends AbstractAuditingEntity {
 
     private String isbn;
 
-    @Column(columnDefinition = "TEXT")
-    private String subtitle;
-
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "book_id")
     private Set<Publisher> publishers;

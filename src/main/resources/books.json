@@ -13,14 +13,12 @@
         "name": "Prentice Hall"
       }
     ],
-    "subtitle": "A Handbook of Agile Software Craftsmanship",
     "publishedDate": "July 2008",
     "imageUrl": "https://covers.openlibrary.org/b/id/15126503-L.jpg"
   },
   {
     "title": "The Pragmatic Programmer",
     "isbn": "9780201616224",
-    "subtitle": "From Journeyman to Master",
     "publishedDate": "1999",
     "imageUrl": "https://covers.openlibrary.org/b/id/7386133-L.jpg",
     "authors": [
@@ -468,7 +466,6 @@
       {
         "name": "DC Comics"
       }
-    ],
-    "subtitle": "Year One"
+    ]
   }
 ]

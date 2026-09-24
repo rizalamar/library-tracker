@@ -15,8 +15,6 @@ public record BookRequest(
         @NotBlank(message = "Isbn is Required")
         String isbn,
 
-        String subtitle,
-
         @NotEmpty(message = "Publisher us required")
         List<Publisher> publishers,
         String publishedDate,

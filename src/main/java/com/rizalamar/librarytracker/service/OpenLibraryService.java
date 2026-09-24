@@ -1,6 +1,5 @@
 package com.rizalamar.librarytracker.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rizalamar.librarytracker.config.GenreNormalizer;
 import com.rizalamar.librarytracker.dto.book.BookResponse;
 import com.rizalamar.librarytracker.dto.openlibrary.AuthorResponse;
@@ -16,7 +15,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Service
@@ -24,7 +22,6 @@ import java.util.Map;
 public class OpenLibraryService {
     private final RestTemplate restTemplate;
     private final GenreNormalizer genreNormalizer;
-    private final ObjectMapper objectMapper;
 
     private static final String ISBN_URL = "https://openlibrary.org/isbn/%s.json";
     private static final String KEY_URL = "https://openlibrary.org%s.json";
@@ -45,15 +42,30 @@ public class OpenLibraryService {
         log.info("Raw edition for ISBN {}: {}", isbn, edition);
 
         WorkResponse work = fetchWork(edition.works());
+
         List<String> cleanGenres = work != null
                 ? genreNormalizer.normalize(nullSafe(work.subjects()))
                 : List.of();
 
+        List<OpenLibraryResponse.Ref> authorRefs = edition.authors();
+        if((authorRefs == null || authorRefs.isEmpty()) && work != null ){
+            authorRefs = work.authorRefs();
+        }
+
+        String description = edition.descriptionText() != null
+                ? edition.descriptionText()
+                : (work != null ? work.descriptionText() : null);
+
+        String imageUrl = buildCoverUrl(edition.covers());
+        if(imageUrl == null && work != null){
+            imageUrl = buildCoverUrl(work.covers());
+        }
+
         return BookResponse.builder()
                 .title(edition.title())
                 .isbn(isbn)
-                .description(edition.descriptionText())
-                .authors(resolveAuthors(edition.authors()))
+                .description(description)
+                .authors(resolveAuthors(authorRefs))
                 .publishers(nullSafe(edition.publishers()))
                 .number_of_pages(edition.number_of_pages())
                 .physicalFormat(edition.physical_format())
@@ -64,7 +76,7 @@ public class OpenLibraryService {
                 .subjectPlaces(work != null ? nullSafe(work.subject_places()) : List.of())
                 .subjectTimes(work != null ? nullSafe(work.subject_times()) : List.of())
                 .publishedDate(edition.publish_date())
-                .imageUrl(buildCoverUrl(edition.covers()))
+                .imageUrl(imageUrl)
                 .available(true)
                 .build();
 

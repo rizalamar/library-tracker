@@ -82,7 +82,6 @@ public class BookService {
                         ).collect(Collectors.toSet())
                 )
                 .isbn(request.isbn())
-                .subtitle(request.subtitle())
                 .publishers(
                         request.publishers().stream()
                                 .map(publisher ->
@@ -124,10 +123,6 @@ public class BookService {
             book.setIsbn(request.isbn());
         }
 
-        if (Objects.nonNull(request.subtitle())) {
-            book.setSubtitle(request.subtitle());
-        }
-
         if (Objects.nonNull(request.publishers())) {
             book.setPublishers(
                     request.publishers().stream()
@@ -162,7 +157,6 @@ public class BookService {
 
         try {
             BookResponse enriched = openLibraryService.fetchBookByIsbn(book.getIsbn());
-            System.out.printf("Enrichment data %s: %s", book.getIsbn(), enriched);
 
             if (enriched == null) return baseBookResponse;
 
@@ -172,7 +166,6 @@ public class BookService {
                     .subjectPlaces(enriched.subjectPlaces() != null ? enriched.subjectPlaces() : List.of())
                     .subjectsPeople(enriched.subjectsPeople() != null ? enriched.subjectsPeople() : List.of())
                     .subjectTimes(enriched.subjectTimes() != null ? enriched.subjectTimes() : List.of())
-                    .excerpts(enriched.excerpts() != null ? enriched.excerpts() : List.of())
                     .build();
         } catch (Exception e) {
             System.out.printf("Enrichment data failed %s: %s", book.getIsbn(), e.getMessage());
@@ -192,13 +185,7 @@ public class BookService {
                                 : List.of()
                 )
                 .isbn(book.getIsbn())
-                .subtitle(book.getSubtitle())
-                .publishers(
-                        book.getPublishers() != null ?
-                                book.getPublishers().stream().map(publisher ->
-                                        new BookResponse.Publishers(publisher.getName())).toList()
-                                : List.of()
-                )
+                .publishers(book.getPublishers().stream().map(Publisher::getName).toList())
                 .publishedDate(book.getPublishedDate())
                 .imageUrl(book.getImageUrl())
                 .available(book.isAvailable())

@@ -103,7 +103,7 @@ public class MyBookService {
                 .id(book.getId())
                 .title(book.getTitle())
                 .isbn(book.getIsbn())
-                .subtitle(book.getSubtitle())
+
                 .authors(
                         book.getAuthors() != null ?
                                 book.getAuthors().stream()
@@ -113,21 +113,12 @@ public class MyBookService {
                                                         author.getUrl()
                                                 )
                                         ).toList() : List.of())
-                .publishers(
-                        book.getPublishers() != null ?
-                                book.getPublishers().stream()
-                                        .map(
-                                                publisher -> new BookResponse.Publishers(
-                                                        publisher.getName()
-                                                )
-                                        ).toList() : List.of()
-                )
+                .publishers(enriched != null ? enriched.publishers() : List.of())
                 .number_of_pages(enriched != null ? enriched.number_of_pages() : null)
                 .subjects(enriched != null ? enriched.subjects() : List.of())
                 .subjectsPeople(enriched != null ? enriched.subjectsPeople() : List.of())
                 .subjectPlaces(enriched != null ? enriched.subjectPlaces() : List.of())
                 .subjectTimes(enriched != null ? enriched.subjectTimes() : List.of())
-                .excerpts(enriched != null ? enriched.excerpts() : List.of())
                 .publishedDate(book.getPublishedDate())
                 .imageUrl(book.getImageUrl())
                 .available(book.isAvailable())
