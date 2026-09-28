@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record SearchResponse(
+public record OpenLibrarySearchResponse(
         Integer numFound,
         Integer start,
         List<Document> docs

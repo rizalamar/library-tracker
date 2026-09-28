@@ -8,7 +8,7 @@ public record ReadableBookSearchResponse(
         int page,
         int limit,
         int candidateTotal,
-        boolean hasNextCadidatePage,
+        boolean hasNextCandidatePage,
         List<Book> books
 ) {
     public record Book(
