@@ -15,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -140,7 +141,9 @@ public class OpenLibraryService {
     private ReadableBookSearchResponse.Book toReadableCandidate(OpenLibrarySearchResponse.Document doc){
         String editionKey = pickEditionKey(doc);
         String isbn = pickIsbn(doc);
-        String readerUrl = buildReadableUrl(editionKey, isbn);
+        String readerUrl = fetchVerifiedReaderUrl(editionKey, isbn);
+        if(readerUrl == null) return null;
+
         String imageUrl = doc.cover_i() != null && doc.cover_i() > 0
                 ? String.format(COVER_URL, doc.cover_i())
                 : null;
@@ -262,5 +265,49 @@ public class OpenLibraryService {
                 .map(code -> Locale.forLanguageTag(code).getDisplayLanguage(Locale.ENGLISH))
                 .filter(name -> !name.isBlank())
                 .toList();
+    }
+
+    private String fetchVerifiedReaderUrl(String editionKey, String isbn){
+        if(editionKey == null && isbn == null) return null;
+
+        String identifier = editionKey != null ? "OLID:" + editionKey : "ISBN: + isbn";
+
+        URI uri = UriComponentsBuilder.fromUriString(PREVIEW_URL)
+                .queryParam("bibkeys", identifier)
+                .queryParam("format", "json")
+                .queryParam("jscmd", "data")
+                .build()
+                .toUri();
+
+        JsonNode previewData = get(uri, JsonNode.class);
+        if(previewData == null) return null;
+
+        JsonNode entry = previewData.get(identifier);
+        if(entry == null) return null;
+        if(!FULL_PREVIEW.equalsIgnoreCase(entry.path("preview").asText(null))) return null;
+
+        return sanitizeReaderUrl(entry.path("url").asText(null));
+    }
+
+    private String sanitizeReaderUrl(String rawUrl){
+        if(rawUrl == null || rawUrl.isBlank()) return null;
+
+        try{
+            URL url = new URL(rawUrl);
+            if(!"https".equalsIgnoreCase(url.getProtocol())) return null;
+            if(url.getUserInfo() != null) return null;
+
+            String host = url.getHost() == null ? "" : url.getHost().toLowerCase(Locale.ROOT);
+            boolean trusted = host.equals("openLibrary.org")
+                    || host.endsWith(".openlibrary.org")
+                    || host.equals("archive.org")
+                    || host.endsWith(".archive.org");
+            if(!trusted) return null;
+
+            return url.toString();
+        } catch (Exception e){
+            log.warn("Rejected untrusted reader URL: {}", rawUrl);
+            return null;
+        }
     }
 }
