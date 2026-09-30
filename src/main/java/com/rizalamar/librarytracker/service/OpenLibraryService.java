@@ -187,18 +187,6 @@ public class OpenLibraryService {
                 .orElse(null);
     }
 
-    private String buildReadableUrl(String editionKey, String isbn){
-        if(editionKey != null && editionKey.matches("^OL\\d+M$")){
-            return "https://openlibrary.org/books/" + editionKey;
-        }
-
-        if(isbn != null){
-            return "https://openlibrary.org/isbn/" + isbn;
-        }
-
-        return null;
-    }
-
     private WorkResponse fetchWork(List<OpenLibraryResponse.Ref> works){
         if(works == null || works.isEmpty() || works.getFirst().key() == null) return null;
         return get(String.format(KEY_URL, works.getFirst().key()), WorkResponse.class);
