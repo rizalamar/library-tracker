@@ -16,10 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -36,7 +33,6 @@ public class OpenLibraryService {
     private static final String USER_AGENT = "LibraryTracker/1.0 (rizalamarulloh2014@gmail.com)";
     private static final String FULL_PREVIEW = "full";
     private static final String PUBLIC_EBOOK_ACCESS = "public";
-    private static final int MAX_IDENTIFIER_LOOKUPS = 10;
 
     @Cacheable(value = "bookMetadata", key = "#isbn")
     public BookResponse fetchBookByIsbn(String isbn){
@@ -115,6 +111,7 @@ public class OpenLibraryService {
                 : response.docs().stream()
                 .filter(this::isPublicReadableCandidate)
                 .map(this::toReadableCandidate)
+                .filter(Objects::nonNull)
                 .toList();
 
         return new ReadableBookSearchResponse(
@@ -154,7 +151,7 @@ public class OpenLibraryService {
                 doc.title(),
                 doc.author_name() != null ? doc.author_name() : List.of(),
                 imageUrl,
-                readerUrl != null,
+                true,
                 readerUrl
         );
     }
@@ -258,7 +255,7 @@ public class OpenLibraryService {
     private String fetchVerifiedReaderUrl(String editionKey, String isbn){
         if(editionKey == null && isbn == null) return null;
 
-        String identifier = editionKey != null ? "OLID:" + editionKey : "ISBN: + isbn";
+        String identifier = editionKey != null ? "OLID:" + editionKey : "ISBN:" + isbn;
 
         URI uri = UriComponentsBuilder.fromUriString(PREVIEW_URL)
                 .queryParam("bibkeys", identifier)
@@ -274,7 +271,7 @@ public class OpenLibraryService {
         if(entry == null) return null;
         if(!FULL_PREVIEW.equalsIgnoreCase(entry.path("preview").asText(null))) return null;
 
-        return sanitizeReaderUrl(entry.path("url").asText(null));
+        return sanitizeReaderUrl(entry.path("preview_url").asText(null));
     }
 
     private String sanitizeReaderUrl(String rawUrl){
@@ -286,7 +283,7 @@ public class OpenLibraryService {
             if(url.getUserInfo() != null) return null;
 
             String host = url.getHost() == null ? "" : url.getHost().toLowerCase(Locale.ROOT);
-            boolean trusted = host.equals("openLibrary.org")
+            boolean trusted = host.equals("openlibrary.org")
                     || host.endsWith(".openlibrary.org")
                     || host.equals("archive.org")
                     || host.endsWith(".archive.org");
