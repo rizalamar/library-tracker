@@ -278,7 +278,7 @@ public class OpenLibraryService {
         if(rawUrl == null || rawUrl.isBlank()) return null;
 
         try{
-            URL url = new URL(rawUrl);
+            URL url = URI.create(rawUrl).toURL();
             if(!"https".equalsIgnoreCase(url.getProtocol())) return null;
             if(url.getUserInfo() != null) return null;
 
