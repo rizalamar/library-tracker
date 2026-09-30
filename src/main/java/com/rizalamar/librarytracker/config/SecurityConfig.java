@@ -45,6 +45,7 @@ public class SecurityConfig {
                                 "/v3/api-docs",
                                 "/webjars/**"
                         ).permitAll()
+                        .requestMatchers("/api/v1/external-books/search").authenticated()
                         .requestMatchers("/api/v1/external-books/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )

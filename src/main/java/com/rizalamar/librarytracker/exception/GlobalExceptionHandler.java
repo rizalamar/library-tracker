@@ -1,7 +1,7 @@
 package com.rizalamar.librarytracker.exception;
 
 import com.rizalamar.librarytracker.dto.WebResponse;
-import org.apache.coyote.Response;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -55,7 +55,19 @@ public class GlobalExceptionHandler {
                         WebResponse.<String>builder()
                                 .code(HttpStatus.FORBIDDEN.value())
                                 .status("FORBIDDEN")
-                                .data("You do not have a permission to access")
+                                .data("You do not have a permission to access. " + exception.getMessage())
+                                .build()
+                );
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<WebResponse<String>> handleConstraintViolation(ConstraintViolationException exception){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(
+                        WebResponse.<String>builder()
+                                .code(HttpStatus.BAD_REQUEST.value())
+                                .status("BAD REQUEST")
+                                .data("Invalid request parameter: " + exception.getMessage())
                                 .build()
                 );
     }
