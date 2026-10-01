@@ -24,9 +24,9 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
         WebResponse<String> webResponse = WebResponse.<String>builder()
-                .code(HttpServletResponse.SC_FORBIDDEN)
-                .status("FORBIDDEN")
-                .data("You do not have authorize to access this resource")
+                .code(HttpServletResponse.SC_UNAUTHORIZED)
+                .status("UNAUTHORIZED")
+                .data("You are not authenticated")
                 .build();
 
         response.getWriter().write(objectMapper.writeValueAsString(webResponse));
