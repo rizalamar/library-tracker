@@ -2,9 +2,11 @@ package com.rizalamar.librarytracker.controller;
 
 import com.rizalamar.librarytracker.dto.WebResponse;
 import com.rizalamar.librarytracker.dto.book.BookResponse;
+import com.rizalamar.librarytracker.dto.openlibrary.AuthorDetailResponse;
 import com.rizalamar.librarytracker.dto.openlibrary.ReadableBookSearchResponse;
 import com.rizalamar.librarytracker.service.OpenLibraryService;
 import jakarta.validation.constraints.Max;
+import java.util.List;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -35,6 +37,21 @@ public class OpenLibraryController {
                         .code(HttpStatus.OK.value())
                         .status("OK")
                         .data(response)
+                        .build()
+        );
+    }
+
+    @GetMapping("/authors/popular")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<WebResponse<List<AuthorDetailResponse>>> getPopularAuthors(
+            @RequestParam(defaultValue = "20") @Min(1) @Max(50) int limit
+    ){
+        List<AuthorDetailResponse> authors = openLibraryService.getPopularAuthors(limit);
+        return ResponseEntity.ok(
+                WebResponse.<List<AuthorDetailResponse>>builder()
+                        .code(HttpStatus.OK.value())
+                        .status("OK")
+                        .data(authors)
                         .build()
         );
     }

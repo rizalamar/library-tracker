@@ -29,6 +29,7 @@ public class OpenLibraryService {
     private static final String KEY_URL = "https://openlibrary.org%s.json";
     private static final String COVER_URL = "https://covers.openlibrary.org/b/id/%d-L.jpg";
     private static final String SEARCH_URL = "https://openlibrary.org/search.json";
+    private static final String TRENDING_URL = "https://openlibrary.org/trending/monthly.json";
     private static final String PREVIEW_URL = "https://openlibrary.org/api/books";
     private static final String USER_AGENT = "LibraryTracker/1.0 (rizalamarulloh2014@gmail.com)";
     private static final String FULL_PREVIEW = "full";
@@ -122,6 +123,66 @@ public class OpenLibraryService {
                 response.start() != null && response.start() + limit < response.numFound(),
                 books
         );
+    }
+
+    public List<AuthorDetailResponse> getPopularAuthors(int limit){
+        URI trendingUri = UriComponentsBuilder.fromUriString(TRENDING_URL)
+                .queryParam("limit", limit * 5)
+                .build()
+                .toUri();
+
+        TrendingBooksResponse trending = get(trendingUri, TrendingBooksResponse.class);
+        if(trending == null || trending.works() == null){
+            return List.of();
+        }
+
+        List<String> authorKeys = trending.works().stream()
+                .filter(w -> w.author_key() != null)
+                .flatMap(w -> w.author_key().stream())
+                .filter(key -> key != null && !key.isBlank())
+                .distinct()
+                .limit(limit)
+                .toList();
+
+        List<AuthorDetailResponse> authors = new ArrayList<>();
+        for(String authorKey : authorKeys){
+            OpenLibraryAuthorResponse author = get(String.format(KEY_URL, "/authors/" + authorKey), OpenLibraryAuthorResponse.class);
+            if(author != null){
+                authors.add(toAuthorDetail(author));
+            }
+        }
+
+        return authors;
+    }
+
+    private AuthorDetailResponse toAuthorDetail(OpenLibraryAuthorResponse source){
+        String bioText = extractText(source.bio());
+
+        List<String> photoUrls = source.photos() == null || source.photos().isEmpty()
+                ? List.of()
+                : source.photos().stream()
+                        .filter(Objects::nonNull)
+                        .map(id -> String.format(COVER_URL, id))
+                        .toList();
+
+        return AuthorDetailResponse.builder()
+                .name(source.name())
+                .personalName(source.personalName())
+                .fullerName(source.fullerName())
+                .birthDate(source.birthDate())
+                .bio(bioText)
+                .photos(photoUrls)
+                .links(source.links() != null ? source.links() : List.of())
+                .alternateNames(source.alternateNames() != null ? source.alternateNames() : List.of())
+                .topWorks(List.of())
+                .build();
+    }
+
+    private String extractText(JsonNode node){
+        if(node == null) return null;
+        if(node.isTextual()) return node.asText();
+        if(node.has("value")) return node.get("value").asText();
+        return null;
     }
 
     private boolean isPublicReadableCandidate(OpenLibrarySearchResponse.Document doc){

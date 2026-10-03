@@ -16,6 +16,7 @@ public record OpenLibrarySearchResponse(
             String key,
             String title,
             List<String> author_name,
+            List<String> author_key,
             Integer cover_i,
             String cover_edition_key,
             List<String> edition_key,
