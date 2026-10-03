@@ -44,11 +44,11 @@ public class BookMetadataMapper {
                 .orElse(null);
     }
 
-    public static List<String> nullSafe(List<String> list){
+    public List<String> nullSafe(List<String> list){
         return list != null ? list : List.of();
     }
 
-    public static  List<String> toLanguageNames(List<String> codes){
+    public  List<String> toLanguageNames(List<String> codes){
         return codes.stream()
                 .map(code -> Locale.forLanguageTag(code).getDisplayLanguage(Locale.ENGLISH))
                 .filter(name -> !name.isBlank())
