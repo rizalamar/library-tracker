@@ -51,8 +51,13 @@ class OpenLibraryServiceTest {
     void setUp() {
         RestTemplate restTemplate = new RestTemplate();
         server = MockRestServiceServer.createServer(restTemplate);
+        OpenLibraryClient client = new OpenLibraryClient(restTemplate);
         service = new OpenLibraryService(
-                restTemplate, new GenreNormalizer()
+                new GenreNormalizer(),
+                client,
+                new BookMetadataMapper(client),
+                new ReadableBookMapper(client),
+                new AuthorMapper()
         );
     }
 
