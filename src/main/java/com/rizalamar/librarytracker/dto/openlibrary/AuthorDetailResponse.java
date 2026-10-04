@@ -22,4 +22,8 @@ public record AuthorDetailResponse(
             String firstPublishYear,
             String coverUrl
     ) {}
+
+    public static AuthorDetailResponse empty(){
+        return AuthorDetailResponse.builder().build();
+    }
 }

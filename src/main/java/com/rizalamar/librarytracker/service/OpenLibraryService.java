@@ -130,8 +130,10 @@ public class OpenLibraryService {
             return List.of();
         }
 
+        List<TrendingBooksResponse.Work> trendingWorks = trending.works();
+
         List<String> authorKeys = trending.works().stream()
-                .filter(w -> w.author_key() != null)
+                .filter(w -> w.author_key() != null && !w.author_key().isEmpty())
                 .flatMap(w -> w.author_key().stream())
                 .filter(key -> key != null && !key.isBlank())
                 .distinct()
@@ -144,8 +146,12 @@ public class OpenLibraryService {
                     String.format(OpenLibraryClient.KEY_URL, "/authors/" + authorKey),
                     OpenLibraryAuthorResponse.class
             );
-            if(author != null){
-                authors.add(authorMapper.toAuthorDetail(author));
+            if (author != null) {
+                List<TrendingBooksResponse.Work> authorWorks = trendingWorks.stream()
+                        .filter(work -> work.author_key() != null && work.author_key().stream().anyMatch(key -> key.equals(
+                                authorKey)))
+                        .toList();
+                authors.add(authorMapper.toAuthorDetail(author, authorWorks));
             }
         }
 
