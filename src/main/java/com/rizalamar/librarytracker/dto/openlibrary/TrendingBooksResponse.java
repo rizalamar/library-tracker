@@ -14,6 +14,8 @@ public record TrendingBooksResponse(
             String key,
             String title,
             List<String> author_key,
-            List<String> author_name
+            List<String> author_name,
+            Integer cover_i,
+            String firstPublishYear
     ) {}
 }
