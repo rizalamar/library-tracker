@@ -22,6 +22,9 @@ public record OpenLibrarySearchResponse(
             List<String> edition_key,
             List<String> isbn,
             String ebook_access,
-            JsonNode availability
-    ){}
+            JsonNode availability,
+            String first_publish_year,
+            String coverUrl
+    ) {
+    }
 }

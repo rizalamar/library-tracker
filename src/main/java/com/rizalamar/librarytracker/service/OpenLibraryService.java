@@ -26,7 +26,7 @@ public class OpenLibraryService {
 
 
     @Cacheable(value = "bookMetadata", key = "#isbn")
-    public BookResponse fetchBookByIsbn(String isbn){
+    public BookResponse fetchBookByIsbn(String isbn) {
         String cleanIsbn = isbn.replace("-", "").trim();
 
         OpenLibraryResponse edition = client.get(
@@ -34,7 +34,7 @@ public class OpenLibraryService {
                 OpenLibraryResponse.class
         );
 
-        if(edition == null){
+        if (edition == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found in Open Library");
         }
 
@@ -47,7 +47,7 @@ public class OpenLibraryService {
                 : List.of();
 
         List<OpenLibraryResponse.Ref> authorRefs = edition.authors();
-        if((authorRefs == null || authorRefs.isEmpty()) && work != null ){
+        if ((authorRefs == null || authorRefs.isEmpty()) && work != null) {
             authorRefs = work.authorRefs();
         }
 
@@ -56,7 +56,7 @@ public class OpenLibraryService {
                 : (work != null ? work.descriptionText() : null);
 
         String imageUrl = bookMetadataMapper.buildCoverUrl(edition.covers());
-        if(imageUrl == null && work != null){
+        if (imageUrl == null && work != null) {
             imageUrl = bookMetadataMapper.buildCoverUrl(work.covers());
         }
 
@@ -82,7 +82,7 @@ public class OpenLibraryService {
 
     }
 
-    public ReadableBookSearchResponse searchReadableBooks(String query, int page, int limit){
+    public ReadableBookSearchResponse searchReadableBooks(String query, int page, int limit) {
         URI uri = UriComponentsBuilder.fromUriString(OpenLibraryClient.SEARCH_URL)
                 .queryParam("q", query + " ebook_access:public")
                 .queryParam("page", page)
@@ -97,7 +97,7 @@ public class OpenLibraryService {
 
 
         OpenLibrarySearchResponse response = client.get(uri, OpenLibrarySearchResponse.class);
-        if(response == null || response.numFound() == null){
+        if (response == null || response.numFound() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Open Library search is unavailable");
         }
 
@@ -119,18 +119,16 @@ public class OpenLibraryService {
         );
     }
 
-    public List<AuthorDetailResponse> getPopularAuthors(int limit){
+    public List<AuthorDetailResponse> getPopularAuthors(int limit) {
         URI trendingUri = UriComponentsBuilder.fromUriString(OpenLibraryClient.TRENDING_URL)
-                .queryParam("limit", limit * 5)
+                .queryParam("limit", limit * 2)
                 .build()
                 .toUri();
 
         TrendingBooksResponse trending = client.get(trendingUri, TrendingBooksResponse.class);
-        if(trending == null || trending.works() == null){
+        if (trending == null || trending.works() == null) {
             return List.of();
         }
-
-        List<TrendingBooksResponse.Work> trendingWorks = trending.works();
 
         List<String> authorKeys = trending.works().stream()
                 .filter(w -> w.author_key() != null && !w.author_key().isEmpty())
@@ -141,17 +139,21 @@ public class OpenLibraryService {
                 .toList();
 
         List<AuthorDetailResponse> authors = new ArrayList<>();
-        for(String authorKey : authorKeys){
+        for (String authorKey : authorKeys) {
             OpenLibraryAuthorResponse author = client.get(
                     String.format(OpenLibraryClient.KEY_URL, "/authors/" + authorKey),
                     OpenLibraryAuthorResponse.class
             );
             if (author != null) {
-                List<TrendingBooksResponse.Work> authorWorks = trendingWorks.stream()
-                        .filter(work -> work.author_key() != null && work.author_key().stream().anyMatch(key -> key.equals(
-                                authorKey)))
-                        .toList();
-                authors.add(authorMapper.toAuthorDetail(author, authorWorks));
+                URI searchUri = UriComponentsBuilder.fromUriString(OpenLibraryClient.SEARCH_URL)
+                        .queryParam("author", authorKey)
+                        .queryParam("limit", 5)
+                        .queryParam("fields", "key,title,first_publish_year,cover_i")
+                        .build()
+                        .toUri();
+
+                OpenLibrarySearchResponse searchResponse = client.get(searchUri, OpenLibrarySearchResponse.class);
+                authors.add(authorMapper.toAuthorDetail(author, searchResponse));
             }
         }
 

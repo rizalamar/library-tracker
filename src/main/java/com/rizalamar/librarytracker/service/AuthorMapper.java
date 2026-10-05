@@ -3,6 +3,7 @@ package com.rizalamar.librarytracker.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.rizalamar.librarytracker.dto.openlibrary.AuthorDetailResponse;
 import com.rizalamar.librarytracker.dto.openlibrary.OpenLibraryAuthorResponse;
+import com.rizalamar.librarytracker.dto.openlibrary.OpenLibrarySearchResponse;
 import com.rizalamar.librarytracker.dto.openlibrary.TrendingBooksResponse;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +12,7 @@ import java.util.Objects;
 
 @Component
 public class AuthorMapper {
-    public AuthorDetailResponse toAuthorDetail(OpenLibraryAuthorResponse source, List<TrendingBooksResponse.Work> trendingWorks){
+    public AuthorDetailResponse toAuthorDetail(OpenLibraryAuthorResponse source, OpenLibrarySearchResponse searchResponse){
         String bioText = extractText(source.bio());
 
         List<String> photoUrls = source.photos() == null || source.photos().isEmpty()
@@ -21,15 +22,15 @@ public class AuthorMapper {
                 .map(id -> String.format(OpenLibraryClient.COVER_URL, id))
                 .toList();
 
-        List<AuthorDetailResponse.AuthorWork> topWorks = trendingWorks == null
+        List<AuthorDetailResponse.AuthorWork> topWorks = searchResponse == null || searchResponse.docs() == null
                 ? List.of()
-                : trendingWorks.stream()
-                .filter(work -> work.author_key() != null && work.author_key().stream().anyMatch(key -> key.equals(source.name())))
-                .map(work -> AuthorDetailResponse.AuthorWork.builder()
-                        .key(work.key())
-                        .title(work.title())
-                        .firstPublishYear(work.firstPublishYear())
-                        .coverUrl(String.format(OpenLibraryClient.COVER_URL, work.cover_i()))
+                : searchResponse.docs().stream()
+                .limit(5)
+                .map(document -> AuthorDetailResponse.AuthorWork.builder()
+                        .key(document.key())
+                        .title(document.title())
+                        .firstPublishYear(document.first_publish_year() != null ? document.first_publish_year() : null)
+                        .coverUrl(document.coverUrl() != null ? String.format(OpenLibraryClient.COVER_URL, document.cover_i()): null)
                         .build()
                 )
                 .toList();
