@@ -2,9 +2,8 @@ package com.rizalamar.librarytracker.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.rizalamar.librarytracker.dto.openlibrary.AuthorDetailResponse;
+import com.rizalamar.librarytracker.dto.openlibrary.AuthorWorksResponse;
 import com.rizalamar.librarytracker.dto.openlibrary.OpenLibraryAuthorResponse;
-import com.rizalamar.librarytracker.dto.openlibrary.OpenLibrarySearchResponse;
-import com.rizalamar.librarytracker.dto.openlibrary.TrendingBooksResponse;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -12,7 +11,7 @@ import java.util.Objects;
 
 @Component
 public class AuthorMapper {
-    public AuthorDetailResponse toAuthorDetail(OpenLibraryAuthorResponse source, OpenLibrarySearchResponse searchResponse){
+    public AuthorDetailResponse toAuthorDetail(OpenLibraryAuthorResponse source, AuthorWorksResponse worksResponse){
         String bioText = extractText(source.bio());
 
         List<String> photoUrls = source.photos() == null || source.photos().isEmpty()
@@ -22,17 +21,25 @@ public class AuthorMapper {
                 .map(id -> String.format(OpenLibraryClient.COVER_URL, id))
                 .toList();
 
-        List<AuthorDetailResponse.AuthorWork> topWorks = searchResponse == null || searchResponse.docs() == null
+        List<AuthorDetailResponse.AuthorWork> topWorks = worksResponse == null || worksResponse.entries() == null
                 ? List.of()
-                : searchResponse.docs().stream()
+                : worksResponse.entries().stream()
                 .limit(5)
-                .map(document -> AuthorDetailResponse.AuthorWork.builder()
-                        .key(document.key())
-                        .title(document.title())
-                        .firstPublishYear(document.first_publish_year() != null ? document.first_publish_year() : null)
-                        .coverUrl(document.coverUrl() != null ? String.format(OpenLibraryClient.COVER_URL, document.cover_i()): null)
-                        .build()
-                )
+                .map(work -> {
+                    String coverUrl = null;
+                    if (work.covers() != null && !work.covers().isEmpty()) {
+                        Integer coverId = work.covers().getFirst();
+                        if (coverId != null && coverId > 0) {
+                            coverUrl = String.format(OpenLibraryClient.COVER_URL, coverId);
+                        }
+                    }
+                    return AuthorDetailResponse.AuthorWork.builder()
+                            .key(work.key())
+                            .title(work.title())
+                            .firstPublishYear(work.getPublishYearString())
+                            .coverUrl(coverUrl)
+                            .build();
+                })
                 .toList();
 
         return AuthorDetailResponse.builder()

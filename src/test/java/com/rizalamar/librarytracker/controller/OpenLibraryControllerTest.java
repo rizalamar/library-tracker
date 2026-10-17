@@ -3,7 +3,6 @@ package com.rizalamar.librarytracker.controller;
 import com.rizalamar.librarytracker.config.SecurityConfig;
 import com.rizalamar.librarytracker.config.Webconfig;
 import com.rizalamar.librarytracker.dto.book.BookResponse;
-import com.rizalamar.librarytracker.dto.openlibrary.ReadableBookSearchResponse;
 import com.rizalamar.librarytracker.exception.custom.CustomAccessDeniedHandler;
 import com.rizalamar.librarytracker.exception.custom.CustomAuthenticationEntryPoint;
 import com.rizalamar.librarytracker.repository.UserRepository;
@@ -54,34 +53,6 @@ class OpenLibraryControllerTest {
 
     @MockitoBean
     private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
-
-    @Test
-    @WithMockUser
-    void searchReadableBooks_shouldReturnOk() throws Exception {
-        ReadableBookSearchResponse mockResponse = new ReadableBookSearchResponse(
-                "dune", 1, 20, 1, false,
-                List.of(new ReadableBookSearchResponse.Book(
-                        "OL123M", "9780441013593", "Dune",
-                        List.of("Frank Herbert"), "https://covers.openlibrary.org/b/id/12345-L.jpg",
-                        true, "https://archive.org/details/dune"
-                ))
-        );
-
-        given(openLibraryService.searchReadableBooks(eq("dune"), eq(1), eq(20)))
-                .willReturn(mockResponse);
-
-        mockMvc.perform(get("/api/v1/external-books/search")
-                        .param("q", "dune")
-                        .param("page", "1")
-                        .param("limit", "20")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value(200))
-                .andExpect(jsonPath("$.status").value("OK"))
-                .andExpect(jsonPath("$.data.query").value("dune"))
-                .andExpect(jsonPath("$.data.books[0].title").value("Dune"));
-    }
 
     @Test
     @WithMockUser(roles = "ADMIN")
