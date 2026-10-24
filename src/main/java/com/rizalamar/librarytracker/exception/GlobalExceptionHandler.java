@@ -5,6 +5,7 @@ import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -58,6 +59,18 @@ public class GlobalExceptionHandler {
                                 .data("You do not have a permission to access. " + exception.getMessage())
                                 .build()
                 );
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<WebResponse<String>> handleBadCredentialsException(BadCredentialsException exception){
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(
+                        WebResponse.<String>builder()
+                                .code(HttpStatus.UNAUTHORIZED.value())
+                                .status("UNAUTHORIZED")
+                                .data("Invalid username or password")
+                                .build()
+                )
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
