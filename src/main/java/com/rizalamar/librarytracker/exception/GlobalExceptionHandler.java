@@ -70,7 +70,7 @@ public class GlobalExceptionHandler {
                                 .status("UNAUTHORIZED")
                                 .data("Invalid username or password")
                                 .build()
-                )
+                );
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
