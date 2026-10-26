@@ -22,7 +22,6 @@ public class OpenLibraryController {
     private final OpenLibraryService openLibraryService;
 
     @GetMapping("/authors/popular")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<WebResponse<List<AuthorDetailResponse>>> getPopularAuthors(
             @RequestParam(defaultValue = "20") @Min(1) @Max(50) int limit
     ){
